@@ -55,3 +55,21 @@ ______________
 Hide cart and profile dropdowns for un-authenticated user by using Inertia's auth prop.
 
 ----------------------------------------------------------------
+
+Installed Spatie Laravel Permission package.
+
+Added the trait related to the package unto the 'User' model.
+
+Created enum files for 'Role' and 'Permission'.
+
+______________
+
+Created seeder files for 'Role' and 'User'.
+
+______________
+
+The established roles and permissions are as follows:
+
+    Users have roles -> roles have permissions -> users inherit permissions from roles
+
+----------------------------------------------------------------
