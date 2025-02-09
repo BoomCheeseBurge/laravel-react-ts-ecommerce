@@ -73,3 +73,41 @@ The established roles and permissions are as follows:
     Users have roles -> roles have permissions -> users inherit permissions from roles
 
 ----------------------------------------------------------------
+
+Installed Filament but using the following command:
+
+    composer require filament/filament
+
+The command excludes the specified version to avoid conflicts that arises when including it.
+
+The command following afterwards is as follows:
+
+    php artisan filament:install --panels
+
+Just press enter on the ID.
+
+Filament user creation user is skipped because the seeder already generates the necessary users.
+
+______________
+
+Added permission and role aliases in the 'app.php' bootstrap file.
+Due to this registered aliases, the Filament's default admin login page is no longer accessible as it will forcibly access the admin panel instead of the login page.
+Instead, a redirect will be made to the app's login page.
+
+Added Spatie's role middleware to the 'AdminPanelProvider.php' file as well as 'auth' middleware, so that the admin panel can only be accessed by authenticated users.
+
+______________
+
+Modified the 'store' method of the 'AuthenticatedSessionController.php' file to redirect admin and vendor users to their admin panel, while common users to the welcome page. 
+
+______________
+
+If the user login went bogus, that just means the app is still trying to force a redirect to admin panel.
+
+Just hard reload the webpage and the user login should be successful.
+
+______________
+
+Filament's authentication middleware is commented out to use the project's authentication.
+
+----------------------------------------------------------------
