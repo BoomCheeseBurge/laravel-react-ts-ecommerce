@@ -1,0 +1,8 @@
+
+Executed the command to perform storage link.
+
+Ziggy Route helper is automatically configured and integrated with the fresh Laravel breeze react installation.
+
+Executed 'npm run build' command only.
+
+----------------------------------------------------------------
