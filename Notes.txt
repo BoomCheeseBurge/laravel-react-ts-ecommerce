@@ -165,3 +165,25 @@ ______________
 Created seeder for 'Department' and 'Category' models.
 
 ----------------------------------------------------------------
+
+Created model, migration, and controller for 'Product'.
+
+Created enum file for 'ProductStatusEnum'.
+
+Created Filament resource for 'Product'.
+
+______________
+
+Added belongs to relationship of 'Department' and 'Category' to the 'Product' model.
+
+Added inputs to the form of Product resource.
+
+Override the 'mutateFormDataBeforeCreate' to provide value beforehand for 'created_by' and 'updated_by' fields.
+
+Prevent admin users from viewing or accessing the 'Product' page.
+
+Added columns to the table of Product resource.
+
+Added redirect URL to index page after creation or edit of Product resource.
+
+----------------------------------------------------------------
