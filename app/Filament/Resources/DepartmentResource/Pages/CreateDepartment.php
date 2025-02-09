@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Filament\Resources\DepartmentResource\Pages;
+
+use App\Filament\Resources\DepartmentResource;
+use Filament\Actions;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateDepartment extends CreateRecord
+{
+    protected static string $resource = DepartmentResource::class;
+
+    protected function getRedirectUrl(): string {
+
+        /**
+         * Since this file is uses the department resource, 
+         * the getResource() method will get the corresponding resource class.
+         * Then, there is the getPages() method in that resource file to which the URL is fetched from.
+         */
+        return $this->getResource()::getUrl('index');
+    }
+}

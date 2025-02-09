@@ -111,3 +111,57 @@ ______________
 Filament's authentication middleware is commented out to use the project's authentication.
 
 ----------------------------------------------------------------
+
+Created model and migration for 'Department'.
+
+______________
+
+Unguard all the models associated with Filament's admin panel through the 'AdminPanelProvider.php' file.
+
+This is a safe and common practice since Filament saves model data safely.
+
+______________
+
+Generated Filament resource for 'Department'.
+
+Added Filament inputs to the form.
+
+'onBlur' will only send network requests with property updates when a user clicks away from an input, or presses the tab key to move to the next input.
+
+Added Filament columns to the table.
+
+Redirect user to the table page after resource creation and edit.
+The redirect is added in the 'CreateDepartment.php' and 'EditDepartment.php' files for department creation and edit.
+
+______________
+
+Prevent vendor users from seeing the department section through the 'canViewAny' function in the 'DepartmentResource.php' file.
+
+______________
+
+Created model and migration for 'Category'.
+
+Created Filament resource for 'Category'.
+
+______________
+
+Added relation manager for 'Category' in the department resource.
+
+The following command is used:
+
+    php artisan make:filament-relation-manager DepartmentResource categories name
+
+______________
+
+Added hasMany relations to the Department model.
+
+And, registered the relation in `DepartmentResource::getRelations()` method.
+______________
+
+Added 'parent' belongs to relation in the 'Category' model.
+
+______________
+
+Created seeder for 'Department' and 'Category' models.
+
+----------------------------------------------------------------
