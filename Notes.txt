@@ -6,3 +6,32 @@ Ziggy Route helper is automatically configured and integrated with the fresh Lar
 Executed 'npm run build' command only.
 
 ----------------------------------------------------------------
+
+Installed DaisyUI using NPM.
+
+Replaced Tailwind 'forms' plugin with DaisyUI plugin in the Tailwind config file.
+Also, removed TailwindCSS forms using the following command:
+
+    npm uninstall @tailwindcss/forms
+
+Added DaisyUI class attributes for text input, text label, and checkbox input components.
+
+Added DaisyUI class attributes for primary, secondary, and danger button components.
+
+Added DaisyUI class attributes for Link class attributes in login and register page.
+
+______________
+
+Modified the login page to have a link to the register page.
+
+______________
+
+Changed the authenticated layout component's function name from 'Authenticated' to 'AuthenticatedLayout' to ease auto-completion.
+
+______________
+
+The navigation between pages may be slow due to SSR (Server-Side Rendering) approach.
+
+Moreover, the SSR server is NOT running yet, so that is also a factor causing the project to be slow in development.
+
+----------------------------------------------------------------
