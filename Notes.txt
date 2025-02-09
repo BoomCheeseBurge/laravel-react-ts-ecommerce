@@ -35,3 +35,23 @@ The navigation between pages may be slow due to SSR (Server-Side Rendering) appr
 Moreover, the SSR server is NOT running yet, so that is also a factor causing the project to be slow in development.
 
 ----------------------------------------------------------------
+
+Moved the default nav element and its content to a scratchpad html file.
+
+______________
+
+Added DaisyUI's navbar style to the newly created NavBar component.
+
+______________
+
+Modified the 'Welcome' page by removing the previous default content.
+
+Added authenticated layout component to the page.
+
+Added DaisyUI's hero section to the 'Welcome' page.
+
+______________
+
+Hide cart and profile dropdowns for un-authenticated user by using Inertia's auth prop.
+
+----------------------------------------------------------------
