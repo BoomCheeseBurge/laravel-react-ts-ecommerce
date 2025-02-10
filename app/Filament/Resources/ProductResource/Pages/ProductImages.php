@@ -12,6 +12,9 @@ class ProductImages extends EditRecord
 {
     protected static string $resource = ProductResource::class;
 
+    // Override the title
+    protected static ?string $title = "Product Images";
+
     // Override the default hero icon
     protected static ?string $navigationIcon = 'heroicon-c-photo';
 
@@ -19,15 +22,16 @@ class ProductImages extends EditRecord
 
         return $form->schema([
             SpatieMediaLibraryFileUpload::make('images')
-            ->image()
-            ->multiple()
-            ->openable()
-            ->panelLayout('grid')
-            ->collection('images')
-            ->reorderable()
-            ->appendFiles()
-            ->preserveFilenames()
-            ->columnSpan(2)
+                ->label(false)
+                ->image()
+                ->multiple()
+                ->openable()
+                ->panelLayout('grid')
+                ->collection('images')
+                ->reorderable()
+                ->appendFiles()
+                ->preserveFilenames()
+                ->columnSpan(3)
         ]);
     }
 

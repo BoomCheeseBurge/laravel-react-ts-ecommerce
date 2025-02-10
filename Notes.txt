@@ -218,3 +218,104 @@ As of 10/02/2025, the image conversion using Spatie media library does NOT work.
 The error came from the Laravel queue listener/worker not being able to perform the conversion.
 
 ----------------------------------------------------------------
+
+Created model for 'VariationType' and 'VariationTypeOption'.
+
+Created model and migration for 'ProductVariation'.
+
+______________
+
+The migration tables defined in the product variations table can be visualized as follows:
+
+o Size [variation type]
+    |
+    |----> Small [variation type option]
+    |
+    |----> Medium [variation type option]
+    |
+    |----> Large [variation type option]
+
+o Color [variation type]
+    |
+    |----> Red [variation type option]
+    |
+    |----> Green [variation type option]
+    |
+    |----> Blue [variation type option]
+
+Both variation types creates various combinations of size and color options.
+
+e.g.,
+
+    Small - Red
+    Small - Green
+    Small - Blue
+    Medium - Red
+    Medium - Green
+    Medium - Blue
+    Large - Red
+    Large - Green
+    Large - Blue
+
+Then, there are also the quantity and price associated with each of those combinations.
+
+==================================================
+    Combination        |    Quantity    | Price |
+==================================================
+    Small - Red        |        10      |   10  |
+    Small - Green      |        1       |   99  |
+    Small - Blue       |        15      |   85  |
+    Medium - Red       |        30      |   13  |
+    Medium - Green     |        24      |   10  |
+    Medium - Blue      |        12      |   20  |
+    Large - Red        |        4       |   10  |
+    Large - Green      |        100     |   31  |
+    Large - Blue       |        67      |   10  |
+
+
+Say that the first three variation type options have the following IDs:
+
+================================
+    ID  |   VariationTypeOption
+================================
+    1   |    Small
+    2   |    Medium
+    3   |    Large
+    4   |    Red
+    5   |    Green
+    6   |    Blue
+
+Then, in the 'product variations' table, the table should something as follows:
+
+=============================================================================
+    ID  |   Product ID  |   Quantity    | Price |   [Variation type options]
+=============================================================================
+    1   |       1       |       10      |   15  |           [1, 4]          |
+    2   |       1       |       12      |   15  |           [1, 5]          |
+
+Where '1' refers to 'Small' variation type option, and '4' refers to 'Red' variation type option.
+The product ID shows that they belong to the same product from the same vendor.
+
+______________
+
+Quantity can be set null which informs that the quantity of the said product is infinite.
+
+Price is also nullable which if not specified, the price will be taken from the default price of the product.
+
+______________
+
+Created enum file for product variation types.
+
+______________
+
+Dynamic variation type options are implemented using Filament's repeater feature.
+
+Added 'hasMany' relation to the variation type model from the product model. 
+
+Timestamps for 'VariationType' and 'VariationTypeOption' model has been disabled.
+
+______________
+
+Override the title for 'product variation types' and 'product variation type options' page.
+
+----------------------------------------------------------------
