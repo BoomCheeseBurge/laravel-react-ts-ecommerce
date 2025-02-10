@@ -1,4 +1,6 @@
 
+Modified the APP_URL to be http://laravel-react-ts-ecommerce.test
+
 Executed the command to perform storage link.
 
 Ziggy Route helper is automatically configured and integrated with the fresh Laravel breeze react installation.
@@ -185,5 +187,34 @@ Prevent admin users from viewing or accessing the 'Product' page.
 Added columns to the table of Product resource.
 
 Added redirect URL to index page after creation or edit of Product resource.
+
+----------------------------------------------------------------
+
+Installed Filament's Spatie media library with the following command:
+
+    composer require filament/spatie-laravel-media-library-plugin
+
+    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
+
+______________
+
+Added sub-navigation for the Product resource, so that later after product images section has been established, users can switch between the two sections (edit and images).
+
+Copied and modified the 'EditProduct.php' file for the Product images.
+
+Modified the 'Product' model to be able to work with Spatie media library.
+
+______________
+
+Registered media conversions from Spatie media library to the Product model.
+
+______________
+
+Override the hero icon for the product images and product resource navigation using Blade UI kit hero icon.
+
+______________
+
+As of 10/02/2025, the image conversion using Spatie media library does NOT work.
+The error came from the Laravel queue listener/worker not being able to perform the conversion.
 
 ----------------------------------------------------------------
