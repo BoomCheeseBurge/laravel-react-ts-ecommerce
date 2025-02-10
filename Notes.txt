@@ -319,3 +319,137 @@ ______________
 Override the title for 'product variation types' and 'product variation type options' page.
 
 ----------------------------------------------------------------
+
+Reduced the sidebar width in 'AdminPanelProvider.php' file.
+
+Copied 'ProductVariationTypes.php' file to be 'ProductVariations.php' file.
+
+______________
+
+The combination of variation type options is known as Cartesian Product.
+
+______________
+
+Added 'hasMany' relation from Product to ProductVariation.
+
+______________
+
+In the 'ProductVariations.php' file, there is cartesian merge (user-defined) method in which its purpose can be depicted as follows:
+
+================================
+   [Variation type options]    |
+================================
+        Small - Red            |
+        Small - Green          |
+        Small - Blue           |
+        Medium - Red           |
+        Medium - Red           |
+        Medium - Red           |
+        Large - Red            |
+        Large - Green          |
+        Large - Blue           |
+
+Say that the small, medium, large were previously created and have their own quantity and price.
+
+The vendor decides to add another size variant, 'XL'.
+
+In that case, the variations query to array will generate the following:
+
+================================
+   [Variation type options]    |
+================================
+        Small - Red            |
+        Small - Green          |
+        Small - Blue           |
+        Medium - Red           |
+        Medium - Red           |
+        Medium - Red           |
+        Large - Red            |
+        Large - Green          |
+        Large - Blue           |
+        XL - Red               |
+        XL - Green             |
+        XL - Blue              |
+
+It is known that there are associated quantity and price for small, medium, and large, except XL.
+
+The merge cartesian method will provide default quantity and price for XL.
+
+=========================================================
+   [Variation type options]    |   Quantity    | Price |
+=========================================================
+        Small - Red            |       10      |   15  |
+        Small - Green          |       10      |   15  |
+        Small - Blue           |       10      |   15  |
+        Medium - Red           |       10      |   15  |
+        Medium - Red           |       10      |   15  |
+        Medium - Red           |       10      |   15  |
+        Large - Red            |       10      |   15  |
+        Large - Green          |       10      |   15  |
+        Large - Blue           |       10      |   15  |
+        XL - Red               |       10      |   15  |
+        XL - Green             |       10      |   15  |
+        XL - Blue              |       10      |   15  |
+
+______________
+
+The cartesian product method will generate the following data:
+
+==============================================================================
+   [Variation type options]    |    Default Quantity    |   Default Price   |
+==============================================================================
+        [Small, Red]            |    product-default     |  product-default  |
+        [Small, Green]          |    product-default     |  product-default  |
+        [Small, Blue]           |    product-default     |  product-default  |
+        [Medium, Red]           |    product-default     |  product-default  |
+        [Medium, Red]           |    product-default     |  product-default  |
+        [Medium, Red]           |    product-default     |  product-default  |
+        [Large, Red]            |    product-default     |  product-default  |
+        [Large, Green]          |    product-default     |  product-default  |
+        [Large, Blue]           |    product-default     |  product-default  |
+        [XL, Red]               |    product-default     |  product-default  |
+        [XL, Green]             |    product-default     |  product-default  |
+        [XL, Blue]              |    product-default     |  product-default  |
+
+The generated JSON data from cartesianProduct() looks somewhat as follows:
+
+[
+    {
+        "variation_type_1": {
+            "id": 1,
+            "name": "Black",
+            "type": "Color",
+        },
+        "variation_type_2": {
+            "id": 4,
+            "name": "Small",
+            "type": "size",
+        },
+        "quantity": 10,
+        "price": 15
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+]
+
+Previously, the cartesianProduct output uses the product's default value of quantity and price.
+However, some combinations already have their own defined values for quantity and price.
+This is where the mergeResult() function appends those existing values.
+
+______________
+
+Set data before form fill, before save, and record update for product variations section.
+
+Added cast field for 'variation_type_option_ids' attribute on ProductVariation model to 'json' datatype.
+
+______________
+
+Added product variations section to modify quantity and price of each product variations combination.
+
+----------------------------------------------------------------
