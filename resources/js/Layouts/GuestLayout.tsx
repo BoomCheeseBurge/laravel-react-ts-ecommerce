@@ -1,5 +1,5 @@
 import ApplicationLogo from '@/Components/Application/ApplicationLogo';
-import NavBar from '@/Components/Core/Navigation/NavBar';
+import NavBar from '@/Components/Application/Navigation/NavBar';
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
 

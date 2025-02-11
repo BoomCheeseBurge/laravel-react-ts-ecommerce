@@ -1,5 +1,5 @@
 import ApplicationLogo from '@/Components/Application/ApplicationLogo';
-import NavBar from '@/Components/Core/Navigation/NavBar';
+import NavBar from '@/Components/Application/Navigation/NavBar';
 import Dropdown from '@/Components/Core/Dropdown';
 import NavLink from '@/Components/Core/NavLink';
 import ResponsiveNavLink from '@/Components/Core/ResponsiveNavLink';

@@ -453,3 +453,36 @@ ______________
 Added product variations section to modify quantity and price of each product variations combination.
 
 ----------------------------------------------------------------
+
+Added a local query scope to only get products associated with the current authenticated vendor user in Product model.
+Used this query scope in Product resource on its Eloquent query.
+In the product section, only products associated with the current authenticated vendor user can seen.
+
+Added a local scope for front-end side for selecting only published products.
+
+______________
+
+Created Laravel API resource for product listing to be rendered on the React component.
+
+Changed 'Welcome.tsx' to 'Home.tsx'.
+
+Created 'ProductItem' component.
+
+Defined new datatype for product in the 'index.d.tsx' file.
+
+Defined new datatype for pagination props in the 'index.d.tsx' file.
+In the 'Home.tsx' file, 'products' will be an instance of PaginationProps which will be an array of data with type product.
+
+______________
+
+Defined home() and show() method in the Product controller.
+
+Defined a belongs to relation for the Product model to the User model.
+
+______________
+
+Created a new core component for currency formatter that uses ES6 internationalization object, 'Intl'.
+
+Used this component in the product item component for formatting the product price.
+
+----------------------------------------------------------------

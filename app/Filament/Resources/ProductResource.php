@@ -39,6 +39,11 @@ class ProductResource extends Resource
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->belongsToVendor();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

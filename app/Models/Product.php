@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\ProductStatusEnum;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +25,22 @@ class Product extends Model implements HasMedia
 
         $this->addMediaConversion('large')
             ->width(1200);
+    }
+
+    /**
+     * Scope a query to only include products belonging to the vendor user.
+     */
+    public function scopeBelongsToVendor(Builder $query): Builder
+    {
+        return $query->where('created_by', auth()->user()->id);
+    }
+
+    /**
+     * Scope a query to only include published products.
+     */
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('status', ProductStatusEnum::Published);
     }
 
     /**
@@ -63,5 +81,15 @@ class Product extends Model implements HasMedia
     public function variations(): HasMany
     {
         return $this->hasMany(ProductVariation::class, 'product_id');
+    }
+
+    /**
+     * Get the user that owns the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
