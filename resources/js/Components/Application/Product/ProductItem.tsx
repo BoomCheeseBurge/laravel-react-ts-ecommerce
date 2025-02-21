@@ -8,7 +8,7 @@ function ProductItem({ product }: { product: Product}) {
         <div className="bg-base-100 card shadow-xl">
             <Link href={route('product.show', product.slug)}>
                 <figure>
-                    <img src={product.image} alt={product.title} className="aspect-square object-cover" />
+                    <img src={product.image} alt={product.title} className="aspect-square object-cover rounded-t-md" />
                 </figure>
             </Link>
 

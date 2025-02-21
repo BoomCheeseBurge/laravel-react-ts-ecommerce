@@ -475,7 +475,7 @@ In the 'Home.tsx' file, 'products' will be an instance of PaginationProps which 
 
 ______________
 
-Defined home() and show() method in the Product controller.
+Defined the home() method in the Product controller.
 
 Defined a belongs to relation for the Product model to the User model.
 
@@ -484,5 +484,56 @@ ______________
 Created a new core component for currency formatter that uses ES6 internationalization object, 'Intl'.
 
 Used this component in the product item component for formatting the product price.
+
+----------------------------------------------------------------
+
+Defined the show() method in the Product controller.
+
+Created Laravel API resource for Product.
+
+Created 'Show.tsx' page for product.
+
+______________
+
+Created 'Carousal.tsx' core component.
+
+Added carousel from DaisyUI.
+
+Added new datatype for image in the 'index.d.tsx' file.
+
+Added 'variationTypes' and 'variations' attributes for the Product type in the 'index.d.tsx' file.
+
+Added new datatype for 'variationTypes' and 'variations' in the 'index.d.tsx' file.
+
+Product datatype will be for product list item and product details.
+
+______________
+
+Created 'Carousel' core component display images on the product details page.
+
+______________
+
+'dangerouslySetInnerHTML' is used to properly display lists avoiding to show the raw character symbols.
+
+______________
+
+Created a 'helpers.ts' file in the 'resources/js' folder.
+
+______________
+
+Tailwind resets the styles for the product description as an output of the WYSIWYG editor.
+
+Added CSS styling in the 'app.css' file.
+
+These added CSS styles revert the content of the WYSIWYG editor output back to its correct format.
+
+Notice that the price value of the selected option has not been saved to the form field.
+This price update on the form will likely be done at the 'useEffect' hook for updating the selected option IDs.  
+
+______________
+
+Added 'ComputedProduct' and 'FormData' types in the 'index.d.tsx' file.
+
+Created 'ProductVariationTypes.tsx' and 'AddToCartButton.tsx' components instead of placing the render code directly inside the 'Show.tsx' page.
 
 ----------------------------------------------------------------

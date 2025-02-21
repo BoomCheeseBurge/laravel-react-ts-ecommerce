@@ -234,6 +234,7 @@ class ProductVariations extends EditRecord
                     ->label(false)
                     ->collapsible()
                     ->addable(false)
+                    ->deletable(false)
                     ->defaultItems(1)
                     ->columns(2)
                     ->columnSpan(2)
