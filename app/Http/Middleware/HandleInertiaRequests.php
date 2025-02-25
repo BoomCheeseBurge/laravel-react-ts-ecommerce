@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -30,6 +31,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $cartService = app(CartService::class);
+
+        $totalQuantity = $cartService->getTotalQuantity();
+        $totalPrice = $cartService->getTotalPrice();
+
+        $cartItems = $cartService->getCartItems();
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -39,6 +47,11 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'success' => session('success'),
+            'totalQuantity' => $totalQuantity,
+            'totalPrice' => $totalPrice,
+            'dropdownCartItems' => $cartItems,
+            'csrf_token' => csrf_token(),
         ];
     }
 }

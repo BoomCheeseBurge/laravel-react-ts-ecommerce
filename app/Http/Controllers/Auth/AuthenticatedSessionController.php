@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Enums\RolesEnum;
 use Illuminate\Http\Request;
+use App\Services\CartService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +30,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): HttpFoundationResponse
+    public function store(LoginRequest $request, CartService $cartService): HttpFoundationResponse
     {
         $request->authenticate();
 
@@ -42,17 +43,22 @@ class AuthenticatedSessionController extends Controller
 
         if ($user->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor])) {
 
+            // Admin and vendor can be regular buyers
+            $cartService->moveCartItemsToDatabase($user->id);
+
             // Redirect to outside of the Inertia page which is Filament's admin panel page
             return Inertia::location(route('filament.admin.pages.dashboard'));
         }
 
+        $cartService->moveCartItemsToDatabase($user->id);
+
         /**
          * Absolute false means to generate URL relative to the current URL
-         * In other words, the full base URL is not generated (e.g., 'http://laravel-react-ts-ecommerce.test/dashboard') 
-         * Instead, it will only be '/dashboard'
+         * In other words, the full base URL is not generated (e.g., 'http://laravel-react-ts-ecommerce.test/home') 
+         * Instead, it will only be '/home'
          * The full base URL will come from the redirect intended route.
          */
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('home', absolute: false));
     }
 
     /**

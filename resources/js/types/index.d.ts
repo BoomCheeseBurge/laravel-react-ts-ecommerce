@@ -19,7 +19,7 @@ export type VariationTypeOption = {
     id: number;
     name: string;
     images: Image[];
-    // type: VariationType; // Just in case if needed
+    type: VariationType; // Just in case if needed
 }
 
 export type VariationType = {
@@ -68,6 +68,25 @@ export type Product = {
     }>
 }
 
+export type CartItem = {
+    id: number;
+    product_id: number;
+    title: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    image: string;
+    option_ids: Record<string, number>;
+    options: VariationTypeOption[];
+}
+
+export type GroupedCartItems = {
+    user: User;
+    items: CartItem[];
+    totalQuantity: number;
+    totalPrice: number;
+}
+
 export type ComputedProduct = {
     quantity: number;
     price: number;
@@ -90,4 +109,8 @@ export type PageProps<
         user: User;
     };
     ziggy: Config & { location: string };
+    totalQuantity: number;
+    totalPrice: number;
+    dropdownCartItems: CartItem[];
+    csrf_token: string;
 };

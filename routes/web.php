@@ -1,22 +1,51 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * 
+ *   ______ _     _ _______ _______ _______
+ *   |  ____ |     | |______ |______    |   
+ *   |_____| |_____| |______ ______|    |   
+ *
+ */
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::post('/cart/store/{product}', function() {
+Route::controller(CartController::class)->group(function () {
 
-    
-})->name('cart.store');
+    Route::get('/cart', 'index')->name('cart.index');
+    Route::post('/cart/add/{product}', 'store')->name('cart.store');
+    Route::put('/cart/{product}', 'update')->name('cart.update');
+    Route::delete('/cart/{product}', 'destroy')->name('cart.destroy');
+});
 
+/**
+ * 
+ *   _______ _     _ _______ _     _
+ *   |_____| |     |    |    |_____|
+ *   |     | |_____|    |    |     |
+ *
+ */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    /**
+     * 
+     *  _    _ _______  ______ _____ _______ _____ _______ ______ 
+     *   \  /  |______ |_____/   |   |______   |   |______ |     \
+     *    \/   |______ |    \_ __|__ |       __|__ |______ |_____/
+     *
+     */
+    Route::middleware('verified')->group(function () {
+        Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    });
 });
 
 require __DIR__.'/auth.php';

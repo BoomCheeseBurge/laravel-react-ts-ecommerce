@@ -27,6 +27,15 @@ class Product extends Model implements HasMedia
             ->width(1200);
     }
 
+    // ---------------------------------------------------------------------
+    /**
+     * 
+     *   _______ _______  _____   _____  _______
+     *   |______ |       |     | |_____] |______
+     *   ______| |_____  |_____| |       |______
+     *
+     */
+
     /**
      * Scope a query to only include products belonging to the vendor user.
      */
@@ -42,6 +51,25 @@ class Product extends Model implements HasMedia
     {
         return $query->where('status', ProductStatusEnum::Published);
     }
+
+    /**
+     * Scope a query to only determine whether the product can be displayed on the website.
+     * 
+     * The condition are not only being published but the vendor must be approved as well
+     */
+    public function scopeForWebsite(Builder $query): Builder
+    {
+        return $query->published();
+    }
+
+    // ----------------------------------------------------------------
+    /**
+     * 
+     *   ______ _______        _______ _______ _____  _____  __   _
+     *  |_____/ |______ |      |_____|    |      |   |     | | \  |
+     *  |    \_ |______ |_____ |     |    |    __|__ |_____| |  \_|
+     *
+     */
 
     /**
      * Get the department that owns the Product
@@ -92,4 +120,42 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    // --------------------------------------------------------------------
+    /**
+     * 
+     *   _     _ _______         _____  _______  ______
+     *   |_____| |______ |      |_____] |______ |_____/
+     *   |     | |______ |_____ |       |______ |    \_
+     *
+     */
+
+     public function getPriceForOptions($optionIds = [])
+     {
+        // Retrieve only the values from the associative array
+        $optionIds = array_values($optionIds);
+
+        // Sort the option IDs for easier checking below
+        sort($optionIds);
+
+        foreach($this->variations as $variation) {
+
+            $varTypeOptIds = $variation->variation_type_option_ids;
+            sort($varTypeOptIds);
+
+            // Find the associated variation type option IDs
+            if ($optionIds == $varTypeOptIds) {
+                /**
+                 * Return the price of that variation type option (if not null)
+                 * else, return general product price
+                 * 
+                 * Note: price of variation type option can be zero if the product is given for free
+                 */
+                return $variation->price !== null ? $variation->price : $this->price;
+            }
+        }
+
+        // Else, return the general price of the product
+        return $this->price;
+     }
 }

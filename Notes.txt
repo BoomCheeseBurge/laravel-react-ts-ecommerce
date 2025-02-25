@@ -537,3 +537,93 @@ Added 'ComputedProduct' and 'FormData' types in the 'index.d.tsx' file.
 Created 'ProductVariationTypes.tsx' and 'AddToCartButton.tsx' components instead of placing the render code directly inside the 'Show.tsx' page.
 
 ----------------------------------------------------------------
+
+Created model and migration files for 'CartItem'.
+
+Created resource controller for 'CartController'.
+
+Added a singleton service binding for the 'CartService' class in the AppServiceProvider file.
+
+Created a provider for 'CartService'.
+
+Added the a controller group for 'CartController'.
+
+______________
+
+Created model and migration files for 'Vendor'.
+
+Set a one-to-one relationship on the 'User' model to 'Vendor' model.
+
+______________
+
+Created a local scope, 'forWebsite', in the 'Product' model.
+
+______________
+
+Added a belongs to relationship on the 'VariationTypeOption' model to 'VariationType' model.
+
+______________
+
+Added shared data for total quantity, total price, and cart items in the 'HandleInertiaRequests' file.
+
+______________
+
+Created an ENUM file for vendor status.
+
+______________
+
+Modified the user seeder so that the created user has its corresponding vendor record created.
+
+______________
+
+Added data that can be shard by the 'PageProps' in the 'index.d.ts' file such as total quantity, total price, and cart items.
+
+Added new datatype for cart item in the 'index.d.tsx' file.
+
+______________
+
+Created an application component for cart item dropdown.
+
+______________
+
+Added csrf token as a shared data to the 'HandleInertiaRequests' file.
+
+______________
+
+Added new datatype for grouped cart items in the 'index.d.tsx' file.
+
+______________
+
+Installed Hero Icons using NPM for React with the following command:
+
+    npm install @heroicons/react
+
+______________
+
+Added middleware group for 'verified'.
+
+Added route to cart checkout from CartController.
+
+______________
+
+Changed the property name in PageProps and HandleInertiaRequests from 'CartItems' to 'DropdownCartItems' to avoid conflict with the 'CartItems' variable name used in the Page.
+
+______________
+
+Added a helper function for generating show product route based on cart item that has variation type option in the 'helpers.ts' file.
+
+______________
+
+Added a function for moving cart items from cookies to the database.
+
+Used the function in the 'AuthenticatedSessionController' file to check whether there is cart items stored in cookies when a user is authenticated.
+
+______________
+
+Added a type cast for 'variation_type_option_ids' column to be an array in the 'CartItem' model.
+
+______________
+
+Replaced 'dashboard' with 'home' in the routes.
+
+----------------------------------------------------------------
