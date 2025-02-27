@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,15 @@ Route::controller(CartController::class)->group(function () {
 
 /**
  * 
+ *   __  ___  __     __   ___ 
+ *  /__`  |  |__) | |__) |__  
+ *  .__/  |  |  \ | |    |___ 
+ *
+ */
+Route::post('/stripe/webhook', [StripeController::class, 'webhook'])->name('stripe.webhook');
+
+/**
+ * 
  *   _______ _     _ _______ _     _
  *   |_____| |     |    |    |_____|
  *   |     | |_____|    |    |     |
@@ -45,6 +55,16 @@ Route::middleware('auth')->group(function () {
      */
     Route::middleware('verified')->group(function () {
         Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+        /**
+         * 
+         *   __  ___  __     __   ___ 
+         *  /__`  |  |__) | |__) |__  
+         *  .__/  |  |  \ | |    |___ 
+         *
+         */
+        Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+        Route::get('/stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
     });
 });
 

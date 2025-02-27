@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\RolesEnum;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -42,12 +43,14 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'is_admin_or_vendor' => auth()->user()?->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor]) ?: false,
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'success' => session('success'),
+            'error' => session('error'),
             'totalQuantity' => $totalQuantity,
             'totalPrice' => $totalPrice,
             'dropdownCartItems' => $cartItems,

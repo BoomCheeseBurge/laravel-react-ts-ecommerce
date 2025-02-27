@@ -141,6 +141,7 @@ class Product extends Model implements HasMedia
         foreach($this->variations as $variation) {
 
             $varTypeOptIds = $variation->variation_type_option_ids;
+            // Sort the option IDs for easier comparison
             sort($varTypeOptIds);
 
             // Find the associated variation type option IDs
@@ -157,5 +158,34 @@ class Product extends Model implements HasMedia
 
         // Else, return the general price of the product
         return $this->price;
+     }
+
+     public function getImageForOptions(array $optionIds = null): string
+     {
+        if ($optionIds) {
+
+            // Get the option IDs only into an array
+            $optionIds = array_values($optionIds);
+
+            // Sort the option IDs for easier checking
+            sort($optionIds);
+
+            // Get the variation type options based on the sorted IDs
+            $options = VariationTypeOption::whereIn('id', $optionIds)->get();
+
+            // Get the images of every option
+            foreach ($options as $option) {
+
+                $image = $option->getFirstMediaUrl('images', 'small');
+
+                // Return the first image of the option if exists
+                if ($image) {
+                    return $image;
+                }
+            }
+        }
+
+        // Else, product has no variation option, return product image
+        return $this->getFirstMediaUrl('images', 'small');
      }
 }

@@ -123,4 +123,21 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Stripe API Config
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options determine the currency and API key used to by Stripe 
+    |
+    */
+
+    'currency' => env('APP_CURRENCY', 'USD'),
+
+    'stripe_secret_key' => env('STRIPE_SECRET_KEY'),
+
+    'stripe_webhook_key' => env('STRIPE_WEBHOOK_KEY'),
+
+    'platform_fee_pct' => 10,
+
 ];

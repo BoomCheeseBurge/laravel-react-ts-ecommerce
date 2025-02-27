@@ -73,7 +73,7 @@ function Index({
                         <form action={route('cart.checkout')} method="POST" >
                             <input type="hidden" name="_token" value={csrf_token} />
 
-                            <PrimaryButton className="rounded-full">
+                            <PrimaryButton className={"rounded-full " + (totalQuantity === 0 ? 'btn-disabled' : '')}>
                                 <CreditCardIcon className="size-6" />
                                 Proceed to Checkout
                             </PrimaryButton>

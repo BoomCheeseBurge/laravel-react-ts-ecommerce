@@ -627,3 +627,154 @@ ______________
 Replaced 'dashboard' with 'home' in the routes.
 
 ----------------------------------------------------------------
+
+Created a new Stripe account.
+
+Create another store Stripe account (from the dashboard) for testing purposes named "Laravel Ecommerce Tutorial".
+
+Ensure that this newly created Stripe account is in 'test mode'.
+
+Copied and pasted the API key from 'home' page to the ENV file named 'STRIPE_SECRET_KEY'. 
+
+______________
+
+***** Installing Stripe PHP Package *****
+
+- Search and go to 'event destinations' in the search bar of the Stripe page.
+- Click on the 'Test with a local listener' button.
+- Follow the step by step displayed instructions:
+    
+    o Download the Stripe CLI for the used OS (for Windows download the stripe_1.24.0_windows_x86_64.zip )
+    o Extract the zip file to the desired location
+    o Add the directory path to the folder where the stripe.exe is located to the System Variables path.
+    o Open CMD and run this command: stripe login
+    o Press 'Enter' which will open the Stripe page for authorizing access to the webhook.
+
+- Before listening to the webhook, install the Strip API PHP package from this link: https://github.com/stripe/stripe-php
+- Continuation after the changes below.
+
+______________
+
+Created model and migration files for 'Order'.
+
+Created a model file for 'OrderItem' (the migration table is defined in the 'Order' migration file).
+
+Created enum file for 'OrderStatusEnum'.
+
+______________
+
+Added 'currency' and 'stripe_secret_key' properties in the 'app.php' config file.
+
+Added 'APP_CURRENCY' to ENV variables.
+
+______________
+
+Defined the checkout method in the Cart controller.
+
+______________
+
+Created a controller for Stripe.
+
+Added routes for Stripe 'success', 'failure' and 'webhook' routes.
+
+Added config in app bootstrap file to make a CSRF token validation exception for Stripe routes (due to the Stripe webhook).
+
+______________
+
+***** Using the Stripe webhook *****
+
+- Run the command:
+
+    stripe listen --forward-to [local_domain_name]/stripe/webhook
+
+    Ex of [local_domain_name]: laravel-react-ts-ecommerce.test/stripe/webhook
+
+- Copy the webhook key and paste to the ENV variables.
+
+______________
+
+Added shared data for error in the 'HandleInertiaRequests' file.
+
+Added data type for 'success' and 'error' for PageProps in the 'index.d.ts' file.
+
+Used the 'error' prop in the authenticated layout component.
+
+______________
+
+Added fillable fields for 'OrderItem' and 'Order' models.
+
+Added a belongsTo relation from 'OrderItem' to 'Order'.
+
+Disabled timestamps for 'OrderItem' model.
+
+Added several relations for the 'Order' model.
+
+Added a type cast for 'variation_type_option_ids' column to be an array in the 'OrderItem' model.
+
+______________
+
+Created a new Page for Stripe success page.
+
+Added 'stripe_webhook_key' property in the 'app.php' config file.
+
+Added 'platform_fee_pct' property in the 'app.php' config file (and assumed to be 10%).
+
+______________
+
+'Website commission' will be 10% of the leftover after deducting Strip fee on the total amount/price.
+
+______________
+
+Fake Card Information (that can be used):
+
+o Card Information
+
+    - 4000 0000 0000 0077 (Fake Credit Card Number)
+    - 12 / 34 (MM / YY)
+    - 455 (CVC)
+
+o Cardholder name
+
+    - User
+
+o Country or region
+
+    - Georgia (for example)
+
+Ignore 'Cash App Pay' option.
+
+Click on 'Pay' button to process the fake payment.
+
+Note: Going to the Stripe checkout payment page should display some activities in the webhook listener output as well as when the payment is completed successfully (check Laravel log file).
+
+______________
+
+Created a new Laravel resource for viewing orders after success Stripe payment named 'OrderViewResource'.
+
+Created a new Laravel resource for vendor user named 'VendorUserResource'.
+
+Added a helper function to retrieve product or variation option image from Spatie Media Library in the 'Product' model.
+
+Defined new datatype for order item and main order in the 'index.d.tsx' file.
+
+______________
+
+Disabled checkout button when there are no items in the cart.
+
+Defined new datatype for for determining whether a user is admin or vendor for the PageProps in the 'index.d.tsx' file.
+
+Added a navigation to the admin dashboard for Admin and Vendor users on the navbar.
+
+______________
+
+Override the default logo for Filament admin panel.
+
+The custom logo file is created in the path 'resources/views/vendor/filament-panels/components/logo.blade.php'.
+
+The existence of this file will overwrite the the same file name in the vendor folder.
+
+______________
+
+Order details page and vendor store page will implemented later.
+
+----------------------------------------------------------------

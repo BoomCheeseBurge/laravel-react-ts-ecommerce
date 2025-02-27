@@ -1,10 +1,19 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import Dropdown from "../Cart/Dropdown";
 
 function NavBar() {
 
     const {auth, totalPrice, totalQuantity} = usePage().props;
-    const {user} = auth;
+    const {user, is_admin_or_vendor} = auth;
+
+    /**
+     * There's no special Inertia React method that perfectly mirrors the behavior of Inertia::location() 
+     * because Inertia::location() triggers a full page reload via a server-side redirect, 
+     * and that's fundamentally different from Inertia's client-side transitions.
+     */
+    const handleVisitDashboard = () => {
+        window.location.href = route('filament.admin.pages.dashboard');
+    };
 
     return (
         <div className="bg-base-100 navbar py-4">
@@ -29,7 +38,14 @@ function NavBar() {
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-48 p-2 shadow gap-1">
+                                {is_admin_or_vendor && (
+                                    <li>
+                                        <button type="button" onClick={handleVisitDashboard} className="justify-between">
+                                            Dashboard
+                                        </button>
+                                    </li>
+                                )}
                                 <li>
                                     <Link href={route('profile.edit')} className="justify-between">
                                         Profile

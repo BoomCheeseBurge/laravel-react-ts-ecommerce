@@ -10,7 +10,9 @@ export default function AuthenticatedLayout({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage().props.auth.user;
+
+    const pageProps = usePage().props;
+    const user = pageProps.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -25,6 +27,15 @@ export default function AuthenticatedLayout({
                         {header}
                     </div>
                 </header>
+            )}
+
+            {/* Display error message if any */}
+            {pageProps.error && (
+                <div className="container mx-auto px-8 mt-8">
+                    <div className="alert alert-error">
+                        {pageProps.error}
+                    </div>
+                </div>
             )}
 
             <main>{children}</main>

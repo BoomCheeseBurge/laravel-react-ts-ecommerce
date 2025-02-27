@@ -22,6 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
+        // Exempt Stripe routes from CSRF validation tokens
+        $middleware->validateCsrfTokens([
+            'stripe/*',
+        ]);
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
