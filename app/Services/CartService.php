@@ -340,7 +340,7 @@ class CartService
 
             $cartItem->update([
                 // Sum the existing quantity with the new quantity
-                'quantity' => DB::raw('quantity + ' . $quantity),
+                'quantity' => DB::raw("quantity + $quantity"),
             ]);
 
         // Else, add the cart item to the database

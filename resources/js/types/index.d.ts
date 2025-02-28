@@ -143,6 +143,9 @@ export type PageProps<
     totalPrice: number;
     dropdownCartItems: CartItem[];
     csrf_token: string;
-    success: string;
+    success: {
+        message: string;
+        time: number;
+    };
     error: string;
 };

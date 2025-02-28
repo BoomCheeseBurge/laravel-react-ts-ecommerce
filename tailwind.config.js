@@ -17,5 +17,17 @@ export default {
         },
     },
 
+    daisyui: {
+        themes: [
+          {
+            light: {
+                ...require("daisyui/src/theming/themes")["light"], // Include existing light themes from Daisyui
+                // "primary": "#6936F5",
+                "primary": "#F4511E", // Override the primary color
+              },
+            },
+          ],
+        },
+
     plugins: [require('daisyui')],
 };

@@ -778,3 +778,55 @@ ______________
 Order details page and vendor store page will implemented later.
 
 ----------------------------------------------------------------
+
+Modified the 'success' session data in the 'HandleInertiaRequests' file as well as its type in the 'index.d.ts. file.
+
+Setup success message in the 'AuthenticatedLayout' component.
+
+NOTE:
+
+    If you don't plan on having any interactive features that require canceling individual timeouts (like a close button) 
+    or any feature that requires clearing all timeouts, and you're solely relying on the useEffect cleanup for unmounting/re-rendering cleanup 
+    and the setTimeout callback for cleanup after 5 seconds, then you don't strictly need timeoutRefs in your current code.
+
+    useEffect Cleanup: The useEffect cleanup function already handles canceling the timeout when the component unmounts or pageProps.success changes.
+
+Observation:
+
+    There is a weird occurrence where after the success message pops up and then hides again, try saving the success message component file.
+    The success message with the same message will show up again and then hides.
+    A possible reasoning is due to React's Strict mode.
+
+______________
+
+Setup Mailpit SMTP testing tool (setup video in Laravel\Misc\Mailpit learning folder).
+
+Modified ENV variables for Mailpit.
+
+Added 'MustVerifyEmail' interface to the 'User' model.
+
+Added 'ShouldQueue' interface and 'Queuable' trait to the 'User' model for sending the email.
+
+______________
+
+Created Laravel markdown mailable classes for 'NewOrder' and 'CheckoutCompleted'.
+
+Published the Laravel mail assets.
+
+Commented out some CSS properties in the 'default.css' file.
+
+Also, added CSS properties in the 'default.css' file.
+
+Modified the slot for the mail header component.
+
+______________
+
+Added larastore logo in the public folder.
+
+Override the DaisyUI theme color in the Tailwind config file.
+
+______________
+
+Send mail to vendor and user in the Stripe controller.
+
+----------------------------------------------------------------

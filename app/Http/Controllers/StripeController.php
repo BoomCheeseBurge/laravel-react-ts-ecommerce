@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CheckoutCompleted;
 use Stripe\Webhook;
 use Inertia\Inertia;
 use App\Models\Order;
@@ -11,7 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\OrderStatusEnum;
 use App\Http\Resources\OrderViewResource;
+use App\Mail\NewOrder;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Response as InertiaResponse;
 
 class StripeController extends Controller
@@ -73,10 +76,10 @@ class StripeController extends Controller
         }
 
         // Print the successful event webhook response
-        Log::info('==================================');
-        Log::info('==================================');
-        Log::info($event->type);
-        Log::info($event);
+        // Log::info('==================================');
+        // Log::info('==================================');
+        // Log::info($event->type);
+        // Log::info($event);
 
         /**
          * There is around 4-5 events received, but only 2 of those are required to be handled.
@@ -149,7 +152,14 @@ class StripeController extends Controller
 
                     // Save the updated order information in the database
                     $order->save();
+
+                    // Send email to the corresponding vendor about the new order placement
+                    Mail::to($order->vendorUser)->send(new NewOrder($order));
                 }
+
+                // Send email to the buyer
+                Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
+
                 break;
             
             // Payment was completed without any issue 
