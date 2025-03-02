@@ -917,3 +917,19 @@ With this setup, if a vendor user has not yet connected to their Stripe account,
 There is a 'Restricted' status for a vendor user in this state to indicate that they have not finished their onboarding procedure of the Stripe account.
 
 ----------------------------------------------------------------
+
+Created model and migration files for 'Payout'.
+
+Created a Laravel command called 'PayoutVendors'.
+
+______________
+
+Adjusted the local scope for vendor eligible payout in the 'Vendor' model to include active Stripe account condition.
+
+______________
+
+Automate the monthly payout process command in the 'AppServiceProvider' file.
+
+For production, add this schedule to the cron entries of the server.
+
+----------------------------------------------------------------
