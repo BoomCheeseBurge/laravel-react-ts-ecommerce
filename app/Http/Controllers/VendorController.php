@@ -65,16 +65,4 @@ class VendorController extends Controller
 
         return;
     }
-
-    public function getStoreImage(): array
-    {
-        // Create an instance of the Pexels API Client by passing in your API token as parameter.
-        $pexels = new Client('MtHwelWcftCII6iniFHWJ2T1u2zJEFqvSTrJEaz9rUnjSjOiUoOj4Hta');
-
-        $pexelImgs = $pexels->searchPhotos('Tigers');
-
-        dd($pexelImgs);
-
-        return $pexelImgs->photos;
-    }
 }
