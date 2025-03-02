@@ -41,7 +41,7 @@ class ProductResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->belongsToVendor();
+        return parent::getEloquentQuery()->belongsToVendor(auth()->user()->id);
     }
 
     public static function form(Form $form): Form

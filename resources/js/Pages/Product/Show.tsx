@@ -5,7 +5,7 @@ import CurrencyFormatter from "@/Components/Core/Custom/CurrencyFormatter";
 import { arraysAreEqual } from "@/helpers";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Product, VariationTypeOption } from "@/types";
-import { Head, router, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 
 function Show({ product, variationOptions }: { product: Product, variationOptions: number[] }) {
@@ -22,7 +22,7 @@ function Show({ product, variationOptions }: { product: Product, variationOption
      * 
      */    
     // **************************************
-    // Define the form for adding to cart (NOT USED YET)
+    // Define the form for adding to cart
     const form = useForm<{
         /**
          * string: variation type id (e.g., "1" that refers to size)
@@ -312,7 +312,7 @@ function Show({ product, variationOptions }: { product: Product, variationOption
     }, [selectedOptions]);
     
     // ------------------------------------------------------------------------
-    
+        
     return (
         <AuthenticatedLayout>
             <Head title={product.title} />
@@ -326,9 +326,21 @@ function Show({ product, variationOptions }: { product: Product, variationOption
 
                     {/* Right Side Column */}
                     <div className="col-span-5">
-                        <h1 className="mb-8 text-2xl">
+                        <h1 className="text-2xl">
                             {product.title}
                         </h1>
+
+                        <p className="mb-8">
+                            by <Link href={route('vendor.profile', product.user.store_name)} 
+                                className="hover:underline" >
+                                {product.user.name}
+                            </Link>
+                            &nbsp;
+                            in <Link href="/" 
+                                className="hover:underline" >
+                                {product.department.name}
+                            </Link>
+                        </p>
 
                         <div className="text-3xl font-semibold">
                             <CurrencyFormatter amount={computedProduct.price} />

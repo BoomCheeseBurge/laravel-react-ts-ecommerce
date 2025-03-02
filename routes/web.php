@@ -38,6 +38,15 @@ Route::post('/stripe/webhook', [StripeController::class, 'webhook'])->name('stri
 
 /**
  * 
+ *        ___       __   __   __  
+ *  \  / |__  |\ | |  \ /  \ |__) 
+ *   \/  |___ | \| |__/ \__/ |  \ 
+ *
+ */
+Route::get('/vendor/store/{vendor:store_name}', [VendorController::class, 'profile'])->name('vendor.profile');
+
+/**
+ * 
  *   _______ _     _ _______ _     _
  *   |_____| |     |    |    |_____|
  *   |     | |_____|    |    |     |

@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\RolesEnum;
-use App\Enums\VendorStatusEnum;
+use Devscast\Pexels\Client;
+use Devscast\Pexels\Parameter\SearchParameters;
+use Inertia\Inertia;
 use App\Models\Vendor;
+use App\Models\Product;
+use App\Enums\RolesEnum;
 use Illuminate\Http\Request;
+use App\Enums\VendorStatusEnum;
 use Illuminate\Validation\Rule;
+use App\Http\Resources\ProductListingResource;
+use Inertia\Response as InertiaResponse;
 
 class VendorController extends Controller
 {
-    public function profile(Vendor $vendor): void
+    public function profile(Vendor $vendor): InertiaResponse
     {
-        # code...
+        $products = Product::forWebsite()
+                            ->belongsToVendor($vendor->user_id)
+                            ->paginate();
+
+        return Inertia::render('Vendor/Profile', [
+            'vendor' => $vendor,
+            'products' => ProductListingResource::collection($products),
+        ]);
     }
 
     /**
@@ -51,5 +64,17 @@ class VendorController extends Controller
         $user->assignRole(RolesEnum::Vendor);
 
         return;
+    }
+
+    public function getStoreImage(): array
+    {
+        // Create an instance of the Pexels API Client by passing in your API token as parameter.
+        $pexels = new Client('MtHwelWcftCII6iniFHWJ2T1u2zJEFqvSTrJEaz9rUnjSjOiUoOj4Hta');
+
+        $pexelImgs = $pexels->searchPhotos('Tigers');
+
+        dd($pexelImgs);
+
+        return $pexelImgs->photos;
     }
 }

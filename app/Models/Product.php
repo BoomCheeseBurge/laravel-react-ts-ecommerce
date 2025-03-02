@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProductStatusEnum;
+use App\Enums\VendorStatusEnum;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -41,9 +42,9 @@ class Product extends Model implements HasMedia
     /**
      * Scope a query to only include products belonging to the vendor user.
      */
-    public function scopeBelongsToVendor(Builder $query): Builder
+    public function scopeBelongsToVendor(Builder $query, int $id): Builder
     {
-        return $query->where('created_by', auth()->user()->id);
+        return $query->where('created_by', $id);
     }
 
     /**
@@ -51,17 +52,26 @@ class Product extends Model implements HasMedia
      */
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', ProductStatusEnum::Published);
+        return $query->where('products.status', ProductStatusEnum::Published);
     }
 
     /**
-     * Scope a query to only determine whether the product can be displayed on the website.
+     * Scope a query to only include approved vendors.
+     */
+    public function scopeVendorApproved(Builder $query): Builder
+    {
+        return $query->join('vendors', 'vendors.user_id', '=', 'products.created_by')
+                    ->where('vendors.status', VendorStatusEnum::Approved->value);
+    }
+
+    /**
+     * Scope a query to determine whether the product can be displayed on the website.
      * 
      * The condition are not only being published but the vendor must be approved as well
      */
     public function scopeForWebsite(Builder $query): Builder
     {
-        return $query->published();
+        return $query->published()->vendorApproved();
     }
 
     // ----------------------------------------------------------------
@@ -138,7 +148,7 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
+    
     // --------------------------------------------------------------------
     /**
      * 

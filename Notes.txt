@@ -949,3 +949,27 @@ ______________
 Fixed the if condition of the 'addItemToCart' method in the 'CartService' file to consider empty arrays as well instead of just null values.
 
 ----------------------------------------------------------------
+
+Updated the code for the 'profile' method in the vendor controller.
+
+Added a local scope in the 'Product' model for including only approved vendors.
+
+Created a React page for vendor profile in 'Vendor/Profile.tsx'.
+
+Defined new datatype for vendor in the 'index.d.tsx' file.
+
+Added new route to view vendor profile page.
+
+Assign the appropriate route link for viewing the vendor profile page in the 'ProductItem.tsx' file.
+
+Added 'store_name' property to the 'user' property in the product listing resource and product resource.
+
+Added a property type to the Product type for store name in the 'index.d.ts' file.
+
+______________
+
+Generated random images for store image using 'Lorem Picsum' from this link:
+
+    https://picsum.photos/
+
+----------------------------------------------------------------
