@@ -830,3 +830,90 @@ ______________
 Send mail to vendor and user in the Stripe controller.
 
 ----------------------------------------------------------------
+
+Created a controller for vendor.
+
+______________
+
+Changed the primary key of 'Vendor' model to 'user_id' field.
+
+Added local scope for vendor payout eligibility on the 'Vendor' model.
+
+Create a relation with the user model from the vendor model.
+
+Created a 'VendorDetails.tsx' page in the 'Pages/Profile/Partials' directory.
+
+______________
+
+Installed composer package to connect Laravel to Stripe.
+
+Link: https://packagist.org/packages/simonhamp/laravel-stripe-connect
+
+The STRIPE_KEY can be taken from the Stripe dashboard on the publishable key.
+
+Changed name 'STRIPE_SECRET_KEY' to 'STRIPE_SECRET' to match the instructed ENV name for the package.
+
+Added the 'connect' method to the Stripe controller.
+
+Added route for the vendor user to connect to Stripe.
+
+Modified the exception for CSRF token validate to be specifically for 'stripe/webhook' in the 'app.php' bootstrap file.
+
+______________
+
+Created a new Laravel resource called 'AuthUserResource'.
+
+Added labels to the vendor status enum.
+
+Modified the shared data in inertia request by returning the auth user resource instead of the user from Laravel request. 
+
+______________
+
+Added new data type for vendor property on User type in the 'index.d.ts' file.
+
+______________
+
+Modified the 'Edit' page of profile to include the 'VendorDetails' component.
+
+______________
+
+Set up the connect process to connect to Stripe by the vendor users.
+
+Steps to be taken:
+
+    1. Go to the Stripe dashboard page.
+    2. Click on the 'More' section and click to the 'Connect' option which can be found on the left side-bar.
+    3. Follow the steps inside by clicking on the preferred options.
+    4. The preferred options selected for this project were the following:
+        - Buyers will purchase from your (How will funds flow on your platform?)
+        - Continue through the acknowledgements of liability for refunds and chargebacks.  
+        - Payouts will be split between sellers (How will sellers be paid out?)
+        - E-commerce products (Select the industry that best matches your business.)
+        - Yes, they're similar (Are the products and services offered by your sellers similar?)
+        - Not sure (How much do your sellers charge for their most expensive product?)
+        - Onboarding hosted by Stripe (Where will sellers create their accounts?)
+        - Express Dashboard (Where will sellers manage their account?)
+        - Review the selected options and click on 'Continue'.
+        - Connection has been established and turn on 'Test mode'.
+    5. Check that there is the 'Connect' dropdown with the 'Connected accounts' section with currently no accounts.
+
+Now, vendor users can create their Stripe account on the platform through the web app.
+
+Have a vendor user click on the 'Connect to Stripe' button.
+
+The following options are selected for testing purposes:
+
+    - Click on the 'Use test phone number' button.
+    - Click on the 'Use test code' button.
+    - Leave country option as it is as well as 'type of business' as individual.
+    - Fill in fake name and web address.
+    - Choose 'Test Institution' for 'Select an account for payouts'v -> Agree and continue -> Connect accounts -> Not now (on 'save with link')
+    - Leave the option as it is (for which account the received earnings will be sent to)
+    - Click on 'agree and submit' button (and will be redirected to our web app)
+
+Look in the profile page again to see that this vendor user has connected to their Stripe account.
+
+With this setup, if a vendor user has not yet connected to their Stripe account, they can publish their products but not receive payouts from them.
+There is a 'Restricted' status for a vendor user in this state to indicate that they have not finished their onboarding procedure of the Stripe account.
+
+----------------------------------------------------------------

@@ -134,7 +134,7 @@ return [
 
     'currency' => env('APP_CURRENCY', 'USD'),
 
-    'stripe_secret_key' => env('STRIPE_SECRET_KEY'),
+    'stripe_secret_key' => env('STRIPE_SECRET'),
 
     'stripe_webhook_key' => env('STRIPE_WEBHOOK_KEY'),
 

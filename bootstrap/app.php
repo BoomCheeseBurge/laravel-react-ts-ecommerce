@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Exempt Stripe routes from CSRF validation tokens
         $middleware->validateCsrfTokens([
-            'stripe/*',
+            'stripe/webhook',
         ]);
 
         //

@@ -80,7 +80,7 @@ export default function AuthenticatedLayout({
             {/* Display success message if any */}
             {successMessages.length > 0 && (
                 
-                <div className="toast toast-top toast-end mt-16 z-[1000]">
+                <div className="toast toast-end toast-top z-[1000] mt-16">
                     {/* Display all the messages inside the state  */}
                     {successMessages.map((msg) => (
                         <div key={msg.id} className="alert alert-success">

@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use App\Enums\OrderStatusEnum;
 use App\Http\Resources\OrderViewResource;
 use App\Mail\NewOrder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Response as InertiaResponse;
@@ -235,5 +236,25 @@ class StripeController extends Controller
         }
 
         return response('', 200);
+    }
+
+    public function connect(): RedirectResponse
+    {
+        // Check if the user is still a regular user
+        if (!auth()->user()->getStripeAccountId()) {
+            // Create a Stripe account to be a vendor user with Express dashboard
+            auth()->user()->createStripeAccount(['type' => 'express']);
+        }
+
+        // Check if the Stripe account of the user is active
+        if (!auth()->user()->isStripeAccountActive()) {
+            /**
+             * Redirect to the Stripe account page to let the user activate their Stripe account
+             * to be able to connect to our platform interface
+             */
+            return redirect(auth()->user()->getStripeAccountLink());
+        }
+
+        return back()->with('success', 'Your account is already connected.');
     }
 }

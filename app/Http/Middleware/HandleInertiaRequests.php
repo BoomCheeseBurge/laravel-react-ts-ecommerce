@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\RolesEnum;
+use App\Http\Resources\AuthUserResource;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -42,7 +43,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? new AuthUserResource($request->user()) : null,
                 'is_admin_or_vendor' => auth()->user()?->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor]) ?: false,
             ],
             'ziggy' => fn () => [

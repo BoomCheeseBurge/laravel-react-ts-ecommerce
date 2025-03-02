@@ -1,9 +1,11 @@
 <?php
 
+use App\Enums\RolesEnum;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +60,15 @@ Route::middleware('auth')->group(function () {
 
         /**
          * 
+         *        ___       __   __   __  
+         *  \  / |__  |\ | |  \ /  \ |__) 
+         *   \/  |___ | \| |__/ \__/ |  \ 
+         *
+         */
+        Route::post('/vendor/register', [VendorController::class, 'store'])->name('vendor.store');
+
+        /**
+         * 
          *   __  ___  __     __   ___ 
          *  /__`  |  |__) | |__) |__  
          *  .__/  |  |  \ | |    |___ 
@@ -65,6 +76,7 @@ Route::middleware('auth')->group(function () {
          */
         Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
         Route::get('/stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
+        Route::post('/stripe/connect', [StripeController::class, 'connect'])->middleware('role:' . RolesEnum::Vendor->value)->name('stripe.connect');
     });
 });
 
