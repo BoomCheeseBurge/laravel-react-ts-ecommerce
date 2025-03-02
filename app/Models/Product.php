@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Enums\ProductStatusEnum;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 class Product extends Model implements HasMedia
 {
@@ -102,6 +104,22 @@ class Product extends Model implements HasMedia
     }
 
     /**
+     * Get all of the options for the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function options(): HasManyThrough
+    {
+        return $this->hasManyThrough(VariationTypeOption::class, // Target model 
+                                    VariationType::class,        // Intermediate model
+                                    'product_id',               // Foreign key on VariationType table
+                                    'variation_type_id',       // Foreign key on Option table
+                                    'id',                       // Local key on Product table
+                                    'id'                  // Local key on VariationType table
+                                    );
+    }
+
+    /**
      * Get all of the variations for the Product
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -130,17 +148,23 @@ class Product extends Model implements HasMedia
      *
      */
 
+     /**
+      * Directly returning the price of the matching variation if found, or the product's base price otherwise
+      *
+      * @param mixed $optionIds
+      */
      public function getPriceForOptions($optionIds = [])
      {
-        // Retrieve only the values from the associative array
-        $optionIds = array_values($optionIds);
-
+         // Create an array of only the values from the associative array
+         $optionIds = array_values($optionIds);
+         
         // Sort the option IDs for easier checking below
         sort($optionIds);
 
         foreach($this->variations as $variation) {
 
             $varTypeOptIds = $variation->variation_type_option_ids;
+
             // Sort the option IDs for easier comparison
             sort($varTypeOptIds);
 
@@ -160,6 +184,12 @@ class Product extends Model implements HasMedia
         return $this->price;
      }
 
+     /**
+      * Retrieves the first available "small" conversion image URL from a set of provided variation option IDs, or returns the product's base image otherwise.
+      *
+      * @param array $optionIds
+      * @return string
+      */
      public function getImageForOptions(array $optionIds = null): string
      {
         if ($optionIds) {
@@ -187,5 +217,94 @@ class Product extends Model implements HasMedia
 
         // Else, product has no variation option, return product image
         return $this->getFirstMediaUrl('images', 'small');
+     }
+
+     /**
+      * Get the image URL for the first matched product variation, or the product's base image otherwise
+      *
+      * @param string $collectionName
+      * @param string $conversion
+      * @return string
+      */
+     public function getFirstImageUrl(string $collectionName = 'images', string $conversion = 'small'): string
+     {
+        if ($this->options->count() > 0) {
+            
+            // Loop through the product variation type options
+            foreach ($this->options as $option) {
+                
+                // Get the corresponding image of the option
+                $imageUrl = $option->getFirstMediaUrl($collectionName, $conversion);
+
+                // Return the first image that is stored
+                if ($imageUrl) {
+                    return $imageUrl;
+                }
+            }
+        }
+        
+        // Else, return the image of the product in general
+        return $this->getFirstMediaUrl($collectionName, $conversion);
+     }
+
+     /**
+      * Get the price of the first product option matched, or the product's base price
+      *
+      * @return float
+      */
+     public function getPriceForFirstOption(): float
+     {  
+        // Get the first option, or null
+        $firstOptions = $this->getFirstOptionsMap();
+
+        // Check if first options is not empty
+        if ($firstOptions) {
+
+            // Return the price of that first option
+            return $this->getPriceForOptions($firstOptions);
+        }
+
+        // Else, return the price of the product in general
+        return $this->price;
+     }
+
+     /**
+      * Return an associative array of variation type ID as key and its 'first type option' as value
+      *
+      * @return array
+      */
+     public function getFirstOptionsMap(): array
+     {
+        return $this->variationTypes
+                    ->mapWithKeys(fn($type) => [$type->id => $type->options[0]?->id])
+                    ->toArray();
+     }
+
+     /**
+      * Return the images of either the variation option or the product in general
+      *
+      * @return \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection
+      */
+     public function getImages(): MediaCollection
+     {
+        // Check if this product has any variation options
+        if ($this->options->count() > 0) {
+            
+            // Loop through the options
+            foreach ($this->options as $option) {
+
+                // Get the images associated with those options
+                $images = $option->getMedia('images');
+
+                // If images not empty, return those
+                if ($images) {
+
+                    return $images;
+                }
+            }
+        }
+
+        // Else, return the images of the product in general
+        return $this->getMedia('images');
      }
 }

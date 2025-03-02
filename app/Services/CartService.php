@@ -29,18 +29,18 @@ class CartService
      *
      */
 
-    public function addItemToCart(Product $product, int $quantity = 1, array $optionIds = null): void
+    public function addItemToCart(Product $product, int $quantity = 1, array $optionIds = []): void
     {
         /**
+         * This if condition will also check against an empty array not just null
+         * 
          * Note: This is for the case where the user adds item to cart from the product listing page instead of the product details page
          *       The user will be able to see the image of this variation type option on the product listing page
          */
-        if ($optionIds === null) {
+        if (!$optionIds) {
 
             // Assign the first option ID from the product (only if option IDs are defined)
-            $optionIds = $product->variationTypes
-                                ->mapWithKeys(fn(VariationType $type) => [$type->id => $type->options[0]?->id])
-                                ->toArray();
+            $optionIds = $product->getFirstOptionsMap();
         }
 
         // Get either the variation type option or product price 

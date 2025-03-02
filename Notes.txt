@@ -933,3 +933,19 @@ Automate the monthly payout process command in the 'AppServiceProvider' file.
 For production, add this schedule to the cron entries of the server.
 
 ----------------------------------------------------------------
+
+Added helper method in the 'Product' model to retrieve the first image of a product if it has variations.
+Used the helper method in the 'ProductListingResource' to fetch the image for the 'image' property.
+
+Added a 'hasManyThrough' relation for related variation options of a 'Product' model.
+
+Added helper method in the 'Product' model to retrieve the price of the first returned product's variation option.
+Used the helper method in the 'ProductListingResource' to fetch the price for the 'price' property.
+
+Added a helper method in the 'Product' model to retrieve images of a variation option.
+
+______________
+
+Fixed the if condition of the 'addItemToCart' method in the 'CartService' file to consider empty arrays as well instead of just null values.
+
+----------------------------------------------------------------
