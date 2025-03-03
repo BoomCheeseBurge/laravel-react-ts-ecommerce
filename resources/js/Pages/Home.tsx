@@ -26,6 +26,13 @@ export default function Home({
                 </div>
             </div>
 
+            {/* Display message if there are no products related to the department */}
+            {products.data.length === 0 && (
+                <div className="px-8 py-16 text-3xl text-center text-gray-300">
+                    No products found
+                </div>
+            )}
+
             <div className="grid grid-cols-1 gap-8 p-8 lg:grid-cols-3 md:grid-cols-2">
                 {products.data.map(product => (
                     <ProductItem product={product} key={product.id} />

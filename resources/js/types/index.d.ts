@@ -61,6 +61,7 @@ export type Product = {
     department: {
         id: number;
         name: string;
+        slug: string;
     };
     /**
      * An array of objects type VariationType (related to the 'variation_types' table)
@@ -142,6 +143,41 @@ export type Vendor = {
     store_address: string;
 };
 
+export type Category = {
+    id: number;
+    name: string;
+};
+
+export type Department = {
+    id: number;
+    name: string;
+    slug: string;
+    meta_title: string;
+    meta_description: string;
+    categories: Category[];
+};
+
+export type PexelsImage = {
+    id: number;
+    width: number;
+    height: number;
+    url: string;
+    photographer: string;
+    photographer_url: string;
+    photographer_id: number;
+    avg_color: string;
+    src: {
+      original: string;
+      large2x: string;
+      large: string;
+      medium: string;
+      small: string;
+      portrait: string;
+      landscape: string;
+      tiny: string;
+    };
+};
+
 export type PaginationProps<T> = {
     data: Array<T>;
 };
@@ -163,4 +199,8 @@ export type PageProps<
         time: number;
     };
     error: string;
+    departments: Department[];
+    appName: string;
+    departmentParam: string;
+    keyword: string;
 };

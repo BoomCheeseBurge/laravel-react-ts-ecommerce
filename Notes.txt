@@ -973,3 +973,67 @@ Generated random images for store image using 'Lorem Picsum' from this link:
     https://picsum.photos/
 
 ----------------------------------------------------------------
+
+Added department query in the 'HandleInertiaRequests' file.
+
+Added a local scope to only include published departments in the 'Department' model.
+
+Created a Laravel resource for department.
+
+Added datatype for department and category in the 'index.d.ts' file.
+
+______________
+
+Created an index page for the Department.
+
+Modified the navbar page component to include a sub-navbar for displaying product departments.
+
+______________
+
+Added property on page props for app name in the 'HandleInertiaRequests' file.
+
+Added the app name type property in the 'index.d.ts' file.
+
+______________
+
+Added route for products by department page.
+
+Added route link in 'NavBar', 'ProductItem', and 'Show' components to the product by department page.
+
+______________
+
+Added department slug property to product listing resource and product resource.
+
+Added a property type to the Product type for department slug in the 'index.d.ts' file.
+
+______________
+
+Added department param property to be included in PageProps when the current route name is 'product.byDepartment' in the 'HandleInertiaRequests.php' and 'index.d.ts' files.
+
+Added active department indicator for the department page in the 'NavBar' component.
+
+______________
+
+Installed 'Pexels PHP' package to be able to fetch images from Pexels API through PHP easily.
+
+Package link here: https://github.com/devscast/pexels
+
+Installed specific version 1.1.4 instead of the latest version since that installed version 1.1.0 which does not work.
+
+Added pexels key to ENV variables and app config file.
+
+Added a property type for pexel image in the 'index.d.ts' file.
+
+Pexel image is shown in the 'Profile' page of vendor profile.
+
+______________
+
+Added search bar on the navbar component.
+
+Copied and pasted the when clause from the 'byDepartment' function to the 'home' function in the product controller and the 'profile' function in the vendor controller.
+
+Added shared data for search keyword in the 'HandleInertiaRequests' file.
+
+Added data type for keyword property in PageProps type in the 'index.d.ts' file.
+
+----------------------------------------------------------------

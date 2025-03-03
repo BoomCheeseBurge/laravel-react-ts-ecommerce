@@ -140,4 +140,5 @@ return [
 
     'platform_fee_pct' => 10,
 
+    'pexels_key' => env('PEXELS_KEY'),
 ];

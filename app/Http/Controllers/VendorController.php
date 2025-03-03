@@ -16,15 +16,27 @@ use Inertia\Response as InertiaResponse;
 
 class VendorController extends Controller
 {
-    public function profile(Vendor $vendor): InertiaResponse
+    public function profile(Request $request, Vendor $vendor): InertiaResponse
     {
+        // Get the keyword from the searchbar
+        $keyword = $request->query('keyword');
+        
         $products = Product::forWebsite()
+                            ->when($keyword, function ($query, $keyword) {
+                                $query->where(function ($query) use ($keyword) {
+                                    $query->where('title', 'LIKE', "%{$keyword}%")
+                                        ->orWhere("description", "LIKE", "%{$keyword}%");
+                                });
+                            })
                             ->belongsToVendor($vendor->user_id)
                             ->paginate();
+
+        $store_image = $this->generatePexelImages()[0];
 
         return Inertia::render('Vendor/Profile', [
             'vendor' => $vendor,
             'products' => ProductListingResource::collection($products),
+            'storeImg' => $store_image,
         ]);
     }
 
@@ -66,15 +78,14 @@ class VendorController extends Controller
         return;
     }
 
-    public function getStoreImage(): array
+    public function generatePexelImages(): array
     {
-        // Create an instance of the Pexels API Client by passing in your API token as parameter.
-        $pexels = new Client('MtHwelWcftCII6iniFHWJ2T1u2zJEFqvSTrJEaz9rUnjSjOiUoOj4Hta');
+        // Set up the Pexel client
+        $pexels = new Client(config('app.pexels_key'));
 
-        $pexelImgs = $pexels->searchPhotos('Tigers');
+        // Fetch the photos from Pexels API
+        $result = $pexels->searchPhotos('Products', new SearchParameters(orientation: 'landscape', size: 'large'));
 
-        dd($pexelImgs);
-
-        return $pexelImgs->photos;
+        return $result->photos;
     }
 }

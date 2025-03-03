@@ -4,8 +4,11 @@ namespace App\Http\Middleware;
 
 use App\Enums\RolesEnum;
 use App\Http\Resources\AuthUserResource;
+use App\Http\Resources\DepartmentResource;
+use App\Models\Department;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -40,6 +43,10 @@ class HandleInertiaRequests extends Middleware
 
         $cartItems = $cartService->getCartItems();
 
+        $departments = Department::published()
+                                ->with('categories')
+                                ->get();
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -59,6 +66,10 @@ class HandleInertiaRequests extends Middleware
             'totalPrice' => $totalPrice,
             'dropdownCartItems' => $cartItems,
             'csrf_token' => csrf_token(),
+            'departments' => DepartmentResource::collection($departments)->collection->toArray(),
+            'appName' => config('app.name'),
+            'departmentParam' => Route::currentRouteName() === 'product.byDepartment' ? $request->segment(2) : '',
+            'keyword' => $request->query('keyword'),
         ];
     }
 }
