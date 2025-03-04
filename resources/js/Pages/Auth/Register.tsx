@@ -3,8 +3,9 @@ import InputLabel from '@/Components/Core/InputLabel';
 import PrimaryButton from '@/Components/Core/PrimaryButton';
 import TextInput from '@/Components/Core/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
+import { TextInputRef } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useRef, useState } from 'react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,6 +14,31 @@ export default function Register() {
         password: '',
         password_confirmation: '',
     });
+
+    // Check if the original and confirmed passwords are the same
+    const [confirmPassword, setConfirmPassword] = useState(true);
+
+    // Reference the original password input
+    const passwordRef = useRef<TextInputRef>(null);
+
+    const passwordConfirmation = (val: string) => {
+
+        const passVal = passwordRef.current?.getValue();
+        /**
+         * Check if the password confirmation is not an empty string and not equal to the original password
+         * 
+         * Note: updater function is used to compare the latest value directly without waiting for a re-render
+         */
+        if (val != '') {
+            if (passVal != val) {
+                setConfirmPassword((p) => p = false);
+            } else if (passVal === val) {
+                setConfirmPassword((p) => p = true);
+            }
+        } else {
+            setConfirmPassword((p) => p = true);
+        }
+    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -73,6 +99,7 @@ export default function Register() {
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
+                        ref={passwordRef}
                     />
 
                     <InputError message={errors.password} className="mt-2" />
@@ -91,8 +118,10 @@ export default function Register() {
                         value={data.password_confirmation}
                         className="w-full block mt-1"
                         autoComplete="new-password"
-                        onChange={(e) => 
-                            setData('password_confirmation', e.target.value)
+                        onChange={(e) => {
+                                setData('password_confirmation', e.target.value);
+                                passwordConfirmation(e.target.value);
+                            }
                         }
                         required
                     />
@@ -101,6 +130,12 @@ export default function Register() {
                         message={errors.password_confirmation}
                         className="mt-2"
                     />
+                    {!confirmPassword && (
+                        <InputError
+                            message={'Passwords do not match'}
+                            className="mt-2"
+                        />
+                    )}
                 </div>
 
                 <div className="flex justify-end items-center mt-4">

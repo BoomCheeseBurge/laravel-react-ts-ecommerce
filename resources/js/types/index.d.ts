@@ -180,6 +180,11 @@ export type PexelsImage = {
     };
 };
 
+export type TextInputRef = {
+    focus: () => void;
+    getValue: () => string | undefined;
+};
+
 export type PaginationProps<T> = {
     data: Array<T>;
 };
