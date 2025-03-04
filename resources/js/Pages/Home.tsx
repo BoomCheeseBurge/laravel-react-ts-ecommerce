@@ -1,15 +1,28 @@
 import ProductItem from '@/Components/Application/Product/ProductItem';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps, PaginationProps, Product } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 
 export default function Home({
+    appName,
     products
 }: PageProps<{ products: PaginationProps<Product> }>) {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Home" />
+            <Head>
+                {/* For SEO */}
+                <title>{'Home'}</title>
+                <meta name="title" content={'home'} />
+                <meta name="description" content={'larastore homepage'} />
+                <link rel="canonical" href={route('home')} />
+
+                <meta property="og:title" content={'home'} />
+                <meta property="og:description" content={'larastore homepage'} />
+                <meta property="og:url" content={route('home')} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content={appName} />
+            </Head>
 
             <div className="bg-gray-200 dark:bg-gray-700 hero h-[24rem]">
                 <div className="hero-content text-center">

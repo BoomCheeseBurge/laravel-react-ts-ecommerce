@@ -1037,3 +1037,34 @@ Added shared data for search keyword in the 'HandleInertiaRequests' file.
 Added data type for keyword property in PageProps type in the 'index.d.ts' file.
 
 ----------------------------------------------------------------
+
+Created new migrations file to add SEO columns to the 'products' table.
+
+Added a section for SEO in the form of Filament Product resource.
+There, vendor users can provide meta title and description for their product.
+
+Added meta title and meta description to the Laravel product resource.
+
+Copied the meta information contained within the <head> tag used in 'Index' page for Department page and pasted to the 'Show' component for product.
+
+Added data type for meta title and meta description to the Product type in the 'index.d.ts' file.
+
+______________
+
+Previously, the product images are passed in the Product laravel resource file.
+Afterwards, in the React component, if variation options are available, the images are switched to variation option images.
+This switch-up causes bad SEO.
+
+The solution is to properly pass the appropriate images from the backend side directly.
+
+Get the options from the request if any in the Product laravel resource file.
+
+______________
+
+Added 'getImagesForOptions' method in the 'Product' model.
+
+______________
+
+Meta tags for SEO have been placed in the React pages of 'Show' [Product], 'Index' [Department], 'Profile' [Vendor], and 'Home'.
+
+----------------------------------------------------------------

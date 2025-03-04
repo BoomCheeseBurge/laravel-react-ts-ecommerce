@@ -28,6 +28,8 @@ use App\Filament\Resources\ProductResource\Pages\EditProduct;
 use App\Filament\Resources\ProductResource\Pages\ProductImages;
 use App\Filament\Resources\ProductResource\Pages\ProductVariations;
 use App\Filament\Resources\ProductResource\Pages\ProductVariationTypes;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ProductResource extends Resource
@@ -115,6 +117,12 @@ class ProductResource extends Resource
                     ->options(ProductStatusEnum::labels())
                     ->default(ProductStatusEnum::Draft->value)
                     ->required(),
+                Section::make('SEO')
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('meta_title'),
+                        Textarea::make('meta_description'),
+                    ]),
             ]);
     }
 

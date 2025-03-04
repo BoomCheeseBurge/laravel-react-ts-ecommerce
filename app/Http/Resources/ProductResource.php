@@ -19,15 +19,29 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Get the variation type options if available
+        $options = $request->input('options') ?: [];
+
+        // If options exist, return their images
+        if ($options) {
+            $images = $this->getImagesForOptions($options);
+
+        // Else, return base product images 
+        } else {
+            $images = $this->getImages();
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
+            'meta_title' => $this->meta_title,
+            'meta_description' => $this->meta_description,
             'price' => $this->price,
             'quantity' => $this->quantity,
             'image' => $this->getFirstMediaUrl('images'),
-            'images' => $this->getMedia('images')->map(function ($image) { // This is product images
+            'images' => $images->map(function ($image) { // This is product images
 
                 // Return the following specific properties from each image media instance
                 return [

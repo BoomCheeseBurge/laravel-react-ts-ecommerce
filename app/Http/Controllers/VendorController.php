@@ -77,7 +77,6 @@ class VendorController extends Controller
 
         return;
     }
-<<<<<<< HEAD
 
     public function generatePexelImages(): array
     {
@@ -89,6 +88,4 @@ class VendorController extends Controller
 
         return $result->photos;
     }
-=======
->>>>>>> 4d0a5018396e246a08531d5e6a9a5c873fa8653b
 }

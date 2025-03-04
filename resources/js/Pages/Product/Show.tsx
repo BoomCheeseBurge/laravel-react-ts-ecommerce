@@ -4,14 +4,18 @@ import Carousel from "@/Components/Core/Custom/Carousel";
 import CurrencyFormatter from "@/Components/Core/Custom/CurrencyFormatter";
 import { arraysAreEqual } from "@/helpers";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Product, VariationTypeOption } from "@/types";
+import { PageProps, Product, VariationTypeOption } from "@/types";
 import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 
-function Show({ product, variationOptions }: { product: Product, variationOptions: number[] }) {
-
-    // console.log(product, variationOptions);
-
+function Show({ 
+    appName, 
+    product, 
+    variationOptions 
+}: PageProps<{ 
+    product: Product, 
+    variationOptions: number[] 
+}>) {
     /**
      * 
      * ██    ██  █████  ██████  ██  █████  ██████  ██      ███████ 
@@ -315,7 +319,20 @@ function Show({ product, variationOptions }: { product: Product, variationOption
         
     return (
         <AuthenticatedLayout>
-            <Head title={product.title} />
+            <Head>
+                {/* For SEO */}
+                <title>{product.title}</title>
+                <meta name="title" content={product.meta_title || product.title} />
+                <meta name="description" content={product.meta_description} />
+                <link rel="canonical" href={route('product.show', product.slug)} />
+
+                <meta property="og:title" content={product.meta_title} />
+                <meta property="og:description" content={product.meta_description} />
+                <meta property="og:image" content={images[0]?.small} />
+                <meta property="og:url" content={route('product.show', product.slug)} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content={appName} />
+            </Head>
 
             <div className="container mx-auto p-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">

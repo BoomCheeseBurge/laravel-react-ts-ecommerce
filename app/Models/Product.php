@@ -195,12 +195,47 @@ class Product extends Model implements HasMedia
      }
 
      /**
+      * Retrieves a collection of images from a set of provided variation option IDs, or return the product's base images otherwise.
+      *
+      * @param array $optionIds
+      * @return string
+      */
+     public function getImagesForOptions(array $optionIds = []): string
+     {
+        if ($optionIds) {
+
+            // Get the option IDs only into an array
+            $optionIds = array_values($optionIds);
+
+            // Sort the option IDs for easier checking
+            sort($optionIds);
+
+            // Get the variation type options based on the sorted IDs
+            $options = VariationTypeOption::whereIn('id', $optionIds)->get();
+
+            // Get the images of every option
+            foreach ($options as $option) {
+
+                $images = $option->getMedia('images');
+
+                // Return the first image of the option if exists
+                if ($images) {
+                    return $images;
+                }
+            }
+        }
+
+        // Else, product has no variation option, return product images
+        return $this->getMedia('images');
+     }
+
+     /**
       * Retrieves the first available "small" conversion image URL from a set of provided variation option IDs, or returns the product's base image otherwise.
       *
       * @param array $optionIds
       * @return string
       */
-     public function getImageForOptions(array $optionIds = null): string
+     public function getImageForOptions(array $optionIds = []): string
      {
         if ($optionIds) {
 
@@ -228,6 +263,34 @@ class Product extends Model implements HasMedia
         // Else, product has no variation option, return product image
         return $this->getFirstMediaUrl('images', 'small');
      }
+
+    /**
+    * Return the images of either the variation option or the product in general
+    *
+    * @return \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection
+    */
+    public function getImages(): MediaCollection
+    {
+        // Check if this product has any variation options
+        if ($this->options->count() > 0) {
+            
+            // Loop through the options
+            foreach ($this->options as $option) {
+
+                // Get the images associated with those options
+                $images = $option->getMedia('images');
+
+                // If images not empty, return those
+                if ($images) {
+
+                    return $images;
+                }
+            }
+        }
+
+        // Else, return the images of the product in general
+        return $this->getMedia('images');
+    }
 
      /**
       * Get the image URL for the first matched product variation, or the product's base image otherwise
@@ -288,33 +351,5 @@ class Product extends Model implements HasMedia
         return $this->variationTypes
                     ->mapWithKeys(fn($type) => [$type->id => $type->options[0]?->id])
                     ->toArray();
-     }
-
-     /**
-      * Return the images of either the variation option or the product in general
-      *
-      * @return \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection
-      */
-     public function getImages(): MediaCollection
-     {
-        // Check if this product has any variation options
-        if ($this->options->count() > 0) {
-            
-            // Loop through the options
-            foreach ($this->options as $option) {
-
-                // Get the images associated with those options
-                $images = $option->getMedia('images');
-
-                // If images not empty, return those
-                if ($images) {
-
-                    return $images;
-                }
-            }
-        }
-
-        // Else, return the images of the product in general
-        return $this->getMedia('images');
      }
 }

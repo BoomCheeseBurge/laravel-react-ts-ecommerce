@@ -4,7 +4,10 @@ import { PageProps, PaginationProps, PexelsImage, Product, Vendor } from "@/type
 import { Head } from "@inertiajs/react";
 
 function Profile({ 
-    vendor, products, storeImg
+    appName, 
+    vendor, 
+    products, 
+    storeImg 
 }: PageProps<{ 
     vendor: Vendor, 
     products: PaginationProps<Product>,
@@ -13,7 +16,19 @@ function Profile({
         
     return (
         <AuthenticatedLayout>
-            <Head title={vendor.store_name + ' Profile'} />
+            <Head>
+                {/* For SEO */}
+                <title>{vendor.store_name + ' Profile'}</title>
+                <meta name="title" content={vendor.store_name + ' Profile'} />
+                <meta name="description" content={'Larastore store page of ' + vendor.store_name} />
+                <link rel="canonical" href={route('vendor.profile', vendor.store_name)} />
+
+                <meta property="og:title" content={vendor.store_name + ' Profile'} />
+                <meta property="og:description" content={'Larastore store page of ' + vendor.store_name} />
+                <meta property="og:url" content={route('vendor.profile', vendor.store_name)} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content={appName} />
+            </Head>
 
             <div className="hero min-h-[320px]" 
                 style={{ 

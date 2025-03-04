@@ -55,6 +55,14 @@ Route::get('/vendor/store/{vendor:store_name}', [VendorController::class, 'profi
  *
  */
 Route::middleware('auth')->group(function () {
+
+    /**
+     * 
+     *   __   __   __   ___         ___ 
+     *  |__) |__) /  \ |__  | |    |__  
+     *  |    |  \ \__/ |    | |___ |___ 
+     *
+     */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

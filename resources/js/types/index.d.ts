@@ -47,6 +47,8 @@ export type Product = {
     id: number;
     title: string;
     slug: string;
+    meta_title: string;
+    meta_description: string;
     price: number;
     quantity: number;
     image: string;
