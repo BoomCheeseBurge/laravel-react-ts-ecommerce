@@ -1078,3 +1078,51 @@ Added data type in the 'index.d.ts' file for the returned object by text input r
 Added a real-time password confirmation validation.
 
 ----------------------------------------------------------------
+
+Created a Laravel job for sending a queueable email verification.
+
+Commented out the registered event in the registration controller and instead dispatch the email verification job (happens on user registration).
+
+Do the same in the 'EmailVerificationNotificationController' by dispatching a job instead of sending the notification synchronously (happens on the re-send email verification link page).
+
+______________
+
+Added more password validation rules in the 'AppServiceProvider' file for production.
+
+For development, the password validation rules are kept simple.
+
+______________
+
+Replaced 'send' method with 'queue' to queue the new order to the vendor and completed checkout to the buyer.
+
+______________
+
+Created a mailable class for vendor payout.
+
+Created a page component for the vendor payout mail template.
+
+Send payout email in queue in the PayoutVendors command.
+
+______________
+
+Added a mail markdown preview route.
+
+Here is the code for a button to preview mail markdown:
+
+    <Link href={route('test.mail.markdown')} className="p-3 rounded-md border-2 border-indigo-500" >View Markdown Mail</Link>
+
+The route is currently set for the vendor payout mail markdown preview.
+
+The route for this is commented out. 
+
+______________
+
+Cancelled making password reset email to be queued.
+
+The reason is to avoid queue delays.
+
+A user likely expects a password reset email to be known directly.
+
+Source: https://masteringlaravel.io/daily/2024-05-30-why-we-dont-queue-password-reset-emails
+
+----------------------------------------------------------------

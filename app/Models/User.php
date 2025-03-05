@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use SimonHamp\LaravelStripeConnect\Traits\Payable;
 use Spatie\Permission\Traits\HasRoles;
@@ -50,6 +48,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    // ----------------------------------------------------------------
+    /**
+     * 
+     *   ______ _______        _______ _______ _____  _____  __   _
+     *  |_____/ |______ |      |_____|    |      |   |     | | \  |
+     *  |    \_ |______ |_____ |     |    |    __|__ |_____| |  \_|
+     *
+     */
 
     /**
      * Get the vendor associated with the User

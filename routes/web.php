@@ -8,6 +8,13 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+// use Illuminate\Mail\Markdown;
+
+// Route::get('/markdown/mail', function () {
+//     $markdown = new Markdown(view(), config('mail.markdown'));
+
+//     return $markdown->render('mail.vendor_payout');
+// })->name('test.mail.markdown');
 
 /**
  * 

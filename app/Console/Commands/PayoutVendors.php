@@ -2,13 +2,16 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\Payout;
 use App\Models\Vendor;
-use Illuminate\Console\Command;
+use App\Mail\VendorPayout;
+use App\Enums\OrderStatusEnum;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Number;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class PayoutVendors extends Command
 {
@@ -39,7 +42,10 @@ class PayoutVendors extends Command
 
         // Process payout for each vendor
         foreach ($vendors as $vendor) {
-            $this->processPayout($vendor);
+            $subtotal = $this->processPayout($vendor);
+            $subtotal = Number::currency($subtotal);
+
+            Mail::to($vendor->user->email)->queue(new VendorPayout($vendor, $subtotal));
         }
 
         // Log the end of the payout process
@@ -63,10 +69,13 @@ class PayoutVendors extends Command
      * Process payout for vendor user
      * 
      * @param \App\Models\Vendor $vendor
-     * @return void
+     * @return int
      */
-    protected function processPayout(Vendor $vendor): void
+    protected function processPayout(Vendor $vendor): int
     {
+        // Store subtotal amount earned by vendor
+        $subtotal = 0;
+
         // Log the start of payout process of a specific vendor
         $this->info("Processing payout for vendor [ID=$vendor->user_id] - \"$vendor->store_name\"");
 
@@ -114,6 +123,9 @@ class PayoutVendors extends Command
                     'end_date' => $end_date,
                 ]);
 
+                // Store the subtotal
+                $subtotal =  $vendorSubtotal;
+
                 /**
                  * This method comes from the installed 'laravel stripe connect' package
                  * 
@@ -135,6 +147,6 @@ class PayoutVendors extends Command
             $this->error($e->getMessage());
         }
 
-        return;
+        return $subtotal;
     }
 }

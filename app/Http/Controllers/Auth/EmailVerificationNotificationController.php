@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailVerification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,11 @@ class EmailVerificationNotificationController extends Controller
             return redirect()->intended(route('home', absolute: false));
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        // Send an email verification notification asynchronously 
+        // $request->user()->sendEmailVerificationNotification();
+
+        // Dispatch an email verification notification job
+        SendEmailVerification::dispatch($request->user());
 
         return back()->with('status', 'verification-link-sent');
     }

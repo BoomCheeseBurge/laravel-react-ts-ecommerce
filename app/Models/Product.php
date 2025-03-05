@@ -163,7 +163,7 @@ class Product extends Model implements HasMedia
       *
       * @param mixed $optionIds
       */
-     public function getPriceForOptions($optionIds = [])
+     public function getPriceForOptions(?array $optionIds = null)
      {
          // Create an array of only the values from the associative array
          $optionIds = array_values($optionIds);
@@ -200,7 +200,7 @@ class Product extends Model implements HasMedia
       * @param array $optionIds
       * @return string
       */
-     public function getImagesForOptions(array $optionIds = []): string
+     public function getImagesForOptions(?array $optionIds = null): string
      {
         if ($optionIds) {
 
@@ -235,7 +235,7 @@ class Product extends Model implements HasMedia
       * @param array $optionIds
       * @return string
       */
-     public function getImageForOptions(array $optionIds = []): string
+     public function getImageForOptions(?array $optionIds = null): string
      {
         if ($optionIds) {
 

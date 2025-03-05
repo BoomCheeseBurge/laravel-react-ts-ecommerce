@@ -9,7 +9,7 @@
             <tr>
                 <td>Seller</td>
                 <td>
-                    <a href="{{ url('/') }}">
+                    <a href="{{ route('vendor.profile', $order->vendorUser->vendor->store_name) }}">
                         {{ $order->vendorUser->vendor->store_name }}
                     </a>
                 </td>
@@ -84,7 +84,7 @@
 
 <x-mail::panel>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, nobis dicta! Ad voluptates qui quo, repellat omnis eveniet sequi accusamus porro dicta hic, modi aut aspernatur, voluptas corrupti cumque doloribus.
-</x-mail::p>
+</x-mail::panel>
 
 Thanks,<br>
 {{ config('app.name') }}

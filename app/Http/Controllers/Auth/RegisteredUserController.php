@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use App\Jobs\SendEmailVerification;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+// use Illuminate\Auth\Events\Registered;
 
 class RegisteredUserController extends Controller
 {
@@ -42,8 +43,19 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        /*
+         * With the project skeleton structure changed in Laravel 11, the 'EvenServiceProvider' class is no longer easily accessible from the project directory 
+         * Thus, the 'Registered' event below is not easily modifiable
+         * 
+         * The code below is commented out to use a queueable email verification notification 
+         * 
+        */
+        // event(new Registered($user));
 
+        // Send email verification with queue
+        SendEmailVerification::dispatch($user);
+
+        // Automatically log in the user
         Auth::login($user);
 
         return redirect(route('home', absolute: false));

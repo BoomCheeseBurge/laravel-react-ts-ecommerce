@@ -29,7 +29,7 @@ class CartService
      *
      */
 
-    public function addItemToCart(Product $product, int $quantity = 1, array $optionIds = []): void
+    public function addItemToCart(Product $product, int $quantity = 1, ?array $optionIds = null): void
     {
         /**
          * This if condition will also check against an empty array not just null
@@ -54,7 +54,7 @@ class CartService
         }
     }
 
-    public function updateItemQuantity(int $productId, int $quantity, array $optionIds = null): void
+    public function updateItemQuantity(int $productId, int $quantity, ?array $optionIds = null): void
     {
         if (Auth::check()) {
 
@@ -65,7 +65,7 @@ class CartService
         }
     }
 
-    public function removeItemFromCart(int $productId, array $optionIds = null): void
+    public function removeItemFromCart(int $productId, ?array $optionIds = null): void
     {
         if (Auth::check()) {
 

@@ -20,6 +20,12 @@ use Inertia\Response as InertiaResponse;
 
 class StripeController extends Controller
 {
+    /**
+     * Stripe Success Page after Payment Process
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return InertiaResponse
+     */
     public function success(Request $request): InertiaResponse
     {
         $user = auth()->user();
@@ -43,11 +49,21 @@ class StripeController extends Controller
         ]);
     }
 
+    /**
+     * Stripe Failure Page after Payment Process
+     * @return InertiaResponse
+     */
     public function failure(): InertiaResponse
     {
         return Inertia::render('Stripe/Failure');
     }
 
+    /**
+     * Stripe webhook to process payment
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return Response
+     */
     public function webhook(Request $request): Response
     {
         $client = new StripeClient(config('app.stripe_secret_key'));
@@ -155,11 +171,11 @@ class StripeController extends Controller
                     $order->save();
 
                     // Send email to the corresponding vendor about the new order placement
-                    Mail::to($order->vendorUser)->send(new NewOrder($order));
+                    Mail::to($order->vendorUser)->queue(new NewOrder($order));
                 }
 
                 // Send email to the buyer
-                Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
+                Mail::to($orders[0]->user)->queue(new CheckoutCompleted($orders));
 
                 break;
             
