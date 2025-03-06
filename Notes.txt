@@ -1158,3 +1158,15 @@ Added a bew relation for variation type option models to the media table.
 Some Eloquent queries likely needs to be more optimized especially in 'getCartItems()' in 'CartService', 'home()' and 'show()' in 'ProductController', and helper functions 'Product' model.
 
 ----------------------------------------------------------------
+
+'getCartItems()' method was called multiple times in the 'HandleInertiaRequests' file. 
+The reason is that aside from this method being called to get the cart items, 
+it was also being called by 'getTotalPrice()' and 'getTotalQuantity()' methods in that file.
+Those two methods have been re-adujusted to instead receive the cart items that was obtained before.
+And so, the 'getCartItems()' method is only called once. 
+
+______________
+
+Added timebox for authentication process.
+
+----------------------------------------------------------------

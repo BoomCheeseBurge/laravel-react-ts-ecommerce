@@ -7,10 +7,13 @@ use Inertia\Response;
 use App\Enums\RolesEnum;
 use Illuminate\Http\Request;
 use App\Services\CartService;
+use Illuminate\Support\Timebox;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Http\Requests\Auth\LoginRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
@@ -32,28 +35,37 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request, CartService $cartService): HttpFoundationResponse
     {
-        $request->authenticate();
+        (new Timebox)->call(function ($timebox) use ($request, $cartService) {
 
-        $request->session()->regenerate();
+            $request->authenticate($timebox);
 
-        /**
-         * @var App\Models\User $user
-         */
-        $user = auth()->user();
+            $request->session()->regenerate();
 
-        // Check if the user is an admin or a vendor
-        if ($user->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor])) {
+            /**
+             * @var App\Models\User $user
+             */
+            $user = auth()->user();
 
-            // Admin and vendor can be regular buyers
+            // Check if the user is an admin or a vendor
+            if ($user->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor])) {
+
+                // Admin and vendor can be regular buyers
+                $cartService->moveCartItemsToDatabase($user->id);
+
+                // Redirect to outside of the Inertia page which is Filament's admin panel page
+                return Inertia::location(route('filament.admin.pages.dashboard'));
+            }
+
+            // Move the cart items from cookies to the database (if any)
             $cartService->moveCartItemsToDatabase($user->id);
 
-            // Redirect to outside of the Inertia page which is Filament's admin panel page
-            return Inertia::location(route('filament.admin.pages.dashboard'));
-        }
+        }, 400 * 1000);
 
-        // Move the cart items from cookies to the database (if any)
-        $cartService->moveCartItemsToDatabase($user->id);
+        // $endTime = microtime(true);
+        // $executionTime = ($endTime - $startTime) * 1000; // Convert to milliseconds
 
+        // Log::info('Authentication successful. Execution time: ' . $executionTime . ' milliseconds.');
+        
         /**
          * Absolute false means to generate URL relative to the current URL
          * In other words, the full base URL is not generated (e.g., 'http://laravel-react-ts-ecommerce.test/home') 

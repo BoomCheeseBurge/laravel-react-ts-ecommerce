@@ -17,6 +17,8 @@ class CartService
     private ?array $cachedCartItems = null;
     protected const COOKIE_NAME = 'cartItems';
     protected const COOKIE_LIFETIME = 60 * 24 * 365; // 1 year in seconds
+    
+    private static $callCount = 0;
 
     // -----------------------------------------------
     /**
@@ -95,6 +97,12 @@ class CartService
 
                 // For authenticated users, retrieve cart items from the database
                 if(Auth::check()) {
+                    self::$callCount++;
+
+                    if (self::$callCount > 2) {
+                        // Function has been called more than once
+                        Log::info('myFunction called more than once. Call count: ' . self::$callCount);
+                    }
                     $cartItems = $this->getCartItemsFromDatabase();
                     
                 // Otherwise, retrieve cart items from the cookies
@@ -145,6 +153,7 @@ class CartService
 
                     // Retrieve the image URL
                     $imageUrl = null;
+
                     foreach ($cartItem['option_ids'] as $option_id) {
 
                         $option = data_get($options, $option_id);
@@ -199,11 +208,11 @@ class CartService
         return [];
     }
 
-    public function getTotalQuantity(): int
+    public function getTotalQuantity(array $cachedCartItems): int
     {
         $totalQuantity = 0;
 
-        foreach ($this->getCartItems() as $item) {
+        foreach ($cachedCartItems as $item) {
 
             $totalQuantity += $item['quantity'];
         }
@@ -211,11 +220,11 @@ class CartService
         return $totalQuantity;
     }
     
-    public function getTotalPrice(): int
+    public function getTotalPrice(array $cachedCartItems): int
     {
         $totalPrice = 0;
 
-        foreach ($this->getCartItems() as $item) {
+        foreach ($cachedCartItems as $item) {
 
             $totalPrice += $item['price'];
         }

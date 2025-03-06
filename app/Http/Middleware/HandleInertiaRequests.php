@@ -37,11 +37,10 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $cartService = app(CartService::class);
-
-        $totalQuantity = $cartService->getTotalQuantity();
-        $totalPrice = $cartService->getTotalPrice();
-
+        
         $cartItems = $cartService->getCartItems();
+        $totalQuantity = $cartService->getTotalQuantity($cartItems);
+        $totalPrice = $cartService->getTotalPrice($cartItems);
 
         $departments = Department::published()
                                 ->with('categories')

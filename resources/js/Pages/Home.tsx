@@ -27,14 +27,13 @@ export default function Home({
             <div className="bg-gray-200 dark:bg-gray-700 hero h-[24rem]">
                 <div className="hero-content text-center">
                     <div className="max-w-md">
-                        <h1 className="text-5xl font-bold">Hello there</h1>
+                        <h1 className="text-5xl font-bold">All your shopping needs in one place!</h1>
 
                         <p className="py-6">
-                            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-                            quasi. In deleniti eaque aut repudiandae et a id nisi.
+                            Ever had trouble finding that one product you see on the internet? Or a neighbour's product that you want? Look no further! We got it all in Larastore!
                         </p>
                         
-                        <button className="btn btn-primary">Get Started</button>
+                        <button className="btn btn-primary">Start Shopping</button>
                     </div>
                 </div>
             </div>
