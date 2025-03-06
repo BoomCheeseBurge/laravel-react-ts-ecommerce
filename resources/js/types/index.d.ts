@@ -55,9 +55,7 @@ export type Product = {
     images: Image[];
     short_description: string;
     description: string;
-    user: {
-        id: number;
-        name: string;
+    vendor: {
         store_name: string;
     };
     department: {

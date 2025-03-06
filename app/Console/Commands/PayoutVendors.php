@@ -45,7 +45,7 @@ class PayoutVendors extends Command
             $subtotal = $this->processPayout($vendor);
             $subtotal = Number::currency($subtotal);
 
-            Mail::to($vendor->user->email)->queue(new VendorPayout($vendor, $subtotal));
+            Mail::to($vendor->with('user')->email)->queue(new VendorPayout($vendor, $subtotal));
         }
 
         // Log the end of the payout process

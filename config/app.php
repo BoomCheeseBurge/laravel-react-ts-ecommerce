@@ -128,7 +128,7 @@ return [
     | Stripe API Config
     |--------------------------------------------------------------------------
     |
-    | These configuration options determine the currency and API key used to by Stripe 
+    | These configuration options determine the currency and API key used to by Stripe.
     |
     */
 
@@ -141,4 +141,18 @@ return [
     'platform_fee_pct' => 10,
 
     'pexels_key' => env('PEXELS_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Limit
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options determine the number of attempts and length 
+    | of time in seconds before a user can re-attempt to login.
+    |
+    */
+
+    'num_of_attempts' => 5,
+    
+    'decay_time' => 60,
 ];

@@ -25,6 +25,6 @@ class CreateProduct extends CreateRecord
          * the getResource() method will get the corresponding resource class.
          * Then, there is the getPages() method in that resource file to which the URL is fetched from.
          */
-        return $this->getResource()::getUrl('index');
+        return $this->previousUrl;
     }
 }

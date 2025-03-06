@@ -40,7 +40,6 @@ class ProductResource extends JsonResource
             'meta_description' => $this->meta_description,
             'price' => $this->price,
             'quantity' => $this->quantity,
-            'image' => $this->getFirstMediaUrl('images'),
             'images' => $images->map(function ($image) { // This is product images
 
                 // Return the following specific properties from each image media instance
@@ -51,23 +50,21 @@ class ProductResource extends JsonResource
                     'large' => $image->getUrl('large'),
                 ];
             }),
-            'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'store_name' => $this->user->vendor->store_name,
+            'vendor' => [
+                'store_name' => $this->vendor->store_name ?? $this->user->name,
             ],
             'department' => [
                 'id' => $this->department->id,
                 'name' => $this->department->name,
                 'slug' => $this->department->slug,
             ],
-            'variationTypes' => $this->variationTypes->map(function ($variationType) {
+            'variationTypes' => $this->loadMissing(['variationTypes', 'variationTypes.options'])->variationTypes->map(function ($variationType) {
 
                 return [
                     'id' => $variationType->id,
                     'name' => $variationType->name,
                     'type' => $variationType->type,
-                    'options' => $variationType->options->map(function ($option) {
+                    'options' => $variationType->loadMissing('options.media')->options->map(function ($option) {
 
                         return [
                             'id' => $option->id,

@@ -35,9 +35,9 @@ function ProductItem({ product }: { product: Product}) {
                 <h2 className="card-title">{product.title}</h2>
 
                 <p>
-                    by <Link href={route('vendor.profile', product.user.store_name)} 
+                    by <Link href={route('vendor.profile', product.vendor.store_name)} 
                         className="hover:underline" >
-                        {product.user.name}
+                        {product.vendor.store_name}
                     </Link>
                     &nbsp;
                     in <Link href={route('product.byDepartment', product.department.slug)} 

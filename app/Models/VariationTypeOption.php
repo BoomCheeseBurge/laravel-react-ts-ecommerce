@@ -6,6 +6,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class VariationTypeOption extends Model implements HasMedia
@@ -44,4 +45,14 @@ class VariationTypeOption extends Model implements HasMedia
      {
          return $this->belongsTo(VariationType::class);
      }
+
+    /**
+     * Get all of the variation type option's images
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'model')->where('collection_name', 'images');
+    }
 }

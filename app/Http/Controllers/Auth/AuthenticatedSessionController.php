@@ -41,6 +41,7 @@ class AuthenticatedSessionController extends Controller
          */
         $user = auth()->user();
 
+        // Check if the user is an admin or a vendor
         if ($user->hasAnyRole([RolesEnum::Admin, RolesEnum::Vendor])) {
 
             // Admin and vendor can be regular buyers
@@ -50,6 +51,7 @@ class AuthenticatedSessionController extends Controller
             return Inertia::location(route('filament.admin.pages.dashboard'));
         }
 
+        // Move the cart items from cookies to the database (if any)
         $cartService->moveCartItemsToDatabase($user->id);
 
         /**

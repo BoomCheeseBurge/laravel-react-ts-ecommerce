@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
                     ->uncompromised()
                 : $rule;
         });
+        
         Vite::prefetch(concurrency: 3);
     }
 }

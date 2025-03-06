@@ -28,6 +28,7 @@ class VendorController extends Controller
                                         ->orWhere("description", "LIKE", "%{$keyword}%");
                                 });
                             })
+                            ->with(['user', 'user.vendor', 'department'])
                             ->belongsToVendor($vendor->user_id)
                             ->paginate();
 

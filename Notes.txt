@@ -1113,7 +1113,7 @@ Here is the code for a button to preview mail markdown:
 
 The route is currently set for the vendor payout mail markdown preview.
 
-The route for this is commented out. 
+The route for this is commented out.
 
 ______________
 
@@ -1124,5 +1124,37 @@ The reason is to avoid queue delays.
 A user likely expects a password reset email to be known directly.
 
 Source: https://masteringlaravel.io/daily/2024-05-30-why-we-dont-queue-password-reset-emails
+
+----------------------------------------------------------------
+
+Added a config property for specifying the number of attempts and decay time for login attempts.
+
+______________
+
+Added eager loading for whichever controller method that uses the ProductListingResource.
+
+______________
+
+Added a direct return if the returned cart items are empty in the 'getCartItems()' method within cart service.
+
+______________
+
+Added a relationship for vendor in the 'Product' model.
+
+Replaced 'user' property name with 'vendor' in the 'ProductListingResource' as well in the 'index.d.ts' file.
+
+Exclude user name and only the user id and store name.
+
+______________
+
+There is a still duplicate query from the 'getFirstOptionsMap' function in the 'Product' model due to how the relation 'variationTypes' is used with the mapWithKeys helper function.
+
+______________
+
+Fixed duplicate queries from the  'getCartItems' method specifically when querying for products based on product IDs.
+
+Added a bew relation for variation type option models to the media table.
+
+Some Eloquent queries likely needs to be more optimized especially in 'getCartItems()' in 'CartService', 'home()' and 'show()' in 'ProductController', and helper functions 'Product' model.
 
 ----------------------------------------------------------------

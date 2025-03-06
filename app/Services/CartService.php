@@ -5,12 +5,12 @@ namespace App\Services;
 use App\Models\Product;
 use App\Models\CartItem;
 use Illuminate\Support\Str;
-use App\Models\VariationType;
 use Illuminate\Support\Facades\DB;
 use App\Models\VariationTypeOption;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class CartService
 {
@@ -102,6 +102,9 @@ class CartService
                     $cartItems = $this->getCartItemsFromCookies();
                 }
 
+                // If the cart item is empty, do not proceed further
+                if(empty($cartItems)) return [];
+
                 /**
                  * Retrieve the product IDs from the cart items
                  * 
@@ -110,7 +113,17 @@ class CartService
                 $productIds = collect($cartItems)->map(fn($item) => $item['product_id']);
 
                 // Retrieve the products associated with the product IDs
-                $products = Product::whereIn('id', $productIds)->with('user.vendor')->forWebsite()->get()->keyBy('id');
+                $products = Product::whereIn('id', $productIds)
+                                    ->without(['variationTypes', 'options'])
+                                    ->with([
+                                            'user.vendor',
+                                            'media' => function (MorphMany $query) {
+                                                $query->where('collection_name', 'images');
+                                            }
+                                        ])
+                                    ->forWebsite()
+                                    ->get()
+                                    ->keyBy('id');
 
                 $cartItemData = [];
 
@@ -267,10 +280,7 @@ class CartService
      */
     protected function getCartItemsFromDatabase(): array
     {
-        $userId = Auth::id();
-
-        $cartItems = CartItem::where('user_id', $userId)
-                            ->get()
+        $cartItems = CartItem::where('user_id', auth()->user()->id)->get()
                             ->map(function ($cartItem) {
                                 return [
                                     'id' => $cartItem->id,
@@ -295,12 +305,10 @@ class CartService
      */
     protected function updateItemQuantityInDatabase(int $productId, int $quantity, array $optionIds): void
     {
-        $userId = Auth::id();
-
         // Ensures that the IDs are sorted in the following format: [1,4] or [2,5] (NOT [4,1] or [5,2])
         ksort($optionIds);
 
-        $cartItem = CartItem::where('user_id', $userId)
+        $cartItem = CartItem::where('user_id', auth()->user()->id)
                             ->where('product_id', $productId)
                             ->where('variation_type_option_ids', json_encode($optionIds))
                             ->first();
@@ -325,12 +333,10 @@ class CartService
      */
     protected function saveItemToDatabase(int $productId, int $quantity, int $price, array $optionIds): void
     {
-        $userId = Auth::id();
-
         // Ensures that the IDs are sorted in the following format: [1,4] or [2,5] (NOT [4,1] or [5,2])
         ksort($optionIds);
 
-        $cartItem = CartItem::where('user_id', $userId)
+        $cartItem = CartItem::where('user_id', auth()->user()->id)
                             ->where('product_id', $productId)
                             ->where('variation_type_option_ids', json_encode($optionIds))
                             ->first();
@@ -346,7 +352,7 @@ class CartService
         // Else, add the cart item to the database
         } else {
             CartItem::create([
-                'user_id' => $userId,
+                'user_id' => auth()->user()->id,
                 'product_id' => $productId,
                 'quantity' => $quantity,
                 'price' => $price,
@@ -364,12 +370,10 @@ class CartService
      */
     protected function removeItemFromDatabase(int $productId, array $optionIds): void
     {
-        $userId = Auth::id();
-
         // Ensures that the IDs are sorted in the following format: [1,4] or [2,5] (NOT [4,1] or [5,2])
         ksort($optionIds);
 
-        $cartItem = CartItem::where('user_id', $userId)
+        $cartItem = CartItem::where('user_id', auth()->user()->id)
                             ->where('product_id', $productId)
                             ->where('variation_type_option_ids', json_encode($optionIds))
                             ->delete();

@@ -25,6 +25,7 @@ class ProductController extends Controller
                                         ->orWhere("description", "LIKE", "%{$keyword}%");
                                 });
                             })
+                            ->with(['vendor', 'department'])
                             ->paginate(12);
 
         return Inertia::render("Home", [
@@ -59,6 +60,10 @@ class ProductController extends Controller
                                         ->orWhere("description", "LIKE", "%{$keyword}%");
                                 });
                             })
+                            ->with([
+                                    'vendor', 
+                                    'department', 
+                                ])
                             ->paginate();
         
         return Inertia::render('Department/Index', [

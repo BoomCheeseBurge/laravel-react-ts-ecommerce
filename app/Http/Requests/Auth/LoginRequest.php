@@ -42,7 +42,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+            RateLimiter::hit($this->throttleKey(), config('app.decay_time'));
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -59,7 +59,8 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        // Check the login attempts of the current user
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), config('app.num_of_attempts'))) {
             return;
         }
 
@@ -80,6 +81,17 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
+        /**
+         * Now, using just the IP address for rate limiting can be too broad. 
+         * If multiple users share the same IP address (e.g., in a corporate network or behind a NAT), 
+         * they would all be subject to the same rate limit.
+         * 
+         * On the other hand, using just the email address can be a security issue. 
+         * If an attacker knows a valid email address, they could lock that user out by repeatedly triggering the rate limit.
+         * 
+         * And so, this combination allows for more granular rate limiting. 
+         * Primarily, this approach increases the difficulty of a brute-force attack.
+         */
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
 }

@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class VariationType extends Model
 {
     public $timestamps = false;
+
+    // ----------------------------------------------------------------
+    /**
+     * 
+     *   ______ _______        _______ _______ _____  _____  __   _
+     *  |_____/ |______ |      |_____|    |      |   |     | | \  |
+     *  |    \_ |______ |_____ |     |    |    __|__ |_____| |  \_|
+     *
+     */
     
     /**
      * Get all of the options for the VariationType

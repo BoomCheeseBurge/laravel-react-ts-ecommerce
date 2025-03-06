@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Enums\ProductStatusEnum;
 use App\Enums\VendorStatusEnum;
+use App\Enums\ProductStatusEnum;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
@@ -17,6 +18,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+     protected $with = ['variationTypes', 'options', 'media'];
 
     public function registerMediaConversions(?Media $media = null): void
     {
@@ -148,6 +156,26 @@ class Product extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    /**
+     * Get the vendor that owns the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class, 'user_id');
+    }
+
+    /**
+     * Get all of the product's images
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+     public function media(): MorphMany
+     {
+         return $this->morphMany(Media::class, 'model')->where('collection_name', 'images');
+     }
     
     // --------------------------------------------------------------------
     /**
@@ -301,18 +329,15 @@ class Product extends Model implements HasMedia
       */
      public function getFirstImageUrl(string $collectionName = 'images', string $conversion = 'small'): string
      {
-        if ($this->options->count() > 0) {
+        // Loop through the product variation type options
+        foreach ($this->options as $option) {
             
-            // Loop through the product variation type options
-            foreach ($this->options as $option) {
-                
-                // Get the corresponding image of the option
-                $imageUrl = $option->getFirstMediaUrl($collectionName, $conversion);
+            // Get the corresponding image of the option
+            $imageUrl = $option->getFirstMediaUrl($collectionName, $conversion);
 
-                // Return the first image that is stored
-                if ($imageUrl) {
-                    return $imageUrl;
-                }
+            // Return the first image that is stored
+            if ($imageUrl) {
+                return $imageUrl;
             }
         }
         
@@ -348,7 +373,7 @@ class Product extends Model implements HasMedia
       */
      public function getFirstOptionsMap(): array
      {
-        return $this->variationTypes
+        return $this->loadMissing(['variationTypes.options'])->variationTypes
                     ->mapWithKeys(fn($type) => [$type->id => $type->options[0]?->id])
                     ->toArray();
      }
