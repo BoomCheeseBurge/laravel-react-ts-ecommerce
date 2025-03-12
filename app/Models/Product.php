@@ -226,9 +226,9 @@ class Product extends Model implements HasMedia
       * Retrieves a collection of images from a set of provided variation option IDs, or return the product's base images otherwise.
       *
       * @param array $optionIds
-      * @return string
+      * @return MediaCollection
       */
-     public function getImagesForOptions(?array $optionIds = null): string
+     public function getImagesForOptions(?array $optionIds = null): MediaCollection
      {
         if ($optionIds) {
 

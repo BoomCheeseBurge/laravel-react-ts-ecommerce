@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -18,6 +19,23 @@ class Order extends Model
         'vendor_subtotal',
         'payment_intent',
     ];
+
+    // ---------------------------------------------------------------------
+    /**
+     * 
+     *   _______ _______  _____   _____  _______
+     *   |______ |       |     | |_____] |______
+     *   ______| |_____  |_____| |       |______
+     *
+     */
+
+    /**
+     * Scope a query to only include products belonging to the vendor user.
+     */
+    public function scopeBelongsToVendor(Builder $query, int $id): Builder
+    {
+        return $query->where('vendor_user_id', $id);
+    }
 
     // ----------------------------------------------------------------
     /**

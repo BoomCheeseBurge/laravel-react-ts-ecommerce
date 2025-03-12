@@ -208,4 +208,5 @@ export type PageProps<
     appName: string;
     departmentParam: string;
     keyword: string;
+    cartItems: array;
 };

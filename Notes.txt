@@ -92,6 +92,12 @@ Filament user creation user is skipped because the seeder already generates the 
 
 ______________
 
+Added 'role' middleware to the AdminPanelProvider class to use Spatie permission control to manage who can have access to Filament's admin panel.
+
+Added 'auth' middleware which belongs to Laravel so that unauthorized users will be redirect to the Laravel login page. 
+
+______________
+
 Added permission and role aliases in the 'app.php' bootstrap file.
 Due to this registered aliases, the Filament's default admin login page is no longer accessible as it will forcibly access the admin panel instead of the login page.
 Instead, a redirect will be made to the app's login page.
@@ -110,7 +116,7 @@ Just hard reload the webpage and the user login should be successful.
 
 ______________
 
-Filament's authentication middleware is commented out to use the project's authentication.
+Filament's authentication middleware is commented out to use the Laravel's auth page instead of Filament's auth page.
 
 ----------------------------------------------------------------
 
@@ -1168,5 +1174,99 @@ And so, the 'getCartItems()' method is only called once.
 ______________
 
 Added timebox for authentication process.
+
+----------------------------------------------------------------
+
+Created a stat widget for stats overview of total unique customers, total vendor products, and pending orders.
+
+Created chart widgets for showing the count of product created monthly in a current year, and status of vendor orders.
+
+______________
+
+Created a Filament resource for vendor orders.
+
+Created a table widget for showing
+
+______________
+
+Fixed timebox placement in the store method of 'AuthenticatedSessionController'.
+
+______________
+
+Created a dashboard page to extend Filament's dashboard in the admin panel.
+
+Created a custom account widget to modify Filament's account widget in the admin panel.
+
+______________
+
+Added a filter for the widget in the admin panel page for vendor users based on week, month, or year.
+
+______________
+
+Fixed the code logic of the chart widget that shows product created monthly.
+
+______________
+
+Created a bar chart showing the sales made from the vendor's products in the current week, month, or year.
+
+______________
+
+Added an if statement in the 'HandleInertiaRequests' file so that the code for the navigation bar in the e-commerce is not executed within filament panels.
+
+______________
+
+Added a local scope for the 'Order' model to filter the query to only include orders of a specific vendor.
+
+______________
+
+Added widgets to the 'ListOrders' resource page.
+
+Added infolist through action on the table of 'ListOrders' resource page.
+
+Ran the following command to add a custom theme for the panel:
+
+    php artisan make:filament-theme
+
+Afterwards, do the following steps:
+
+  ⇂ First, add a new item to the `input` array of `vite.config.js`: `resources/css/filament/admin/theme.css`
+  ⇂ Next, register the theme in the admin panel provider using `->viteTheme('resources/css/filament/admin/theme.css')`
+  ⇂ Finally, run `npm run dev` to compile the theme in development
+
+Used developer tool to identify the Tailwind CSS custom utility class that Filament use to style the sub-heading of a resource page.
+Modified its font size using Tailwind CSS utility class.
+
+______________
+
+Created a view page for the Order Filament resource.
+
+    php artisan make:filament-page ViewUser --resource=UserResource --type=ViewRecord
+
+______________
+
+Added an infolist in the OrderResource file that will automatically be used in the 'View' page for order resource.
+
+______________
+
+Created a blade view file in the directory 'resources/views/filament/infolists/entries/order-items.blade.php' for displaying order items belonging to an order.
+
+______________
+
+Added path to default Tailwind CSS styling to the vite config file and its vite theme to the admin panel provider.
+
+Added dark mode setting to the tailwind config file.
+
+______________
+
+Added data type for cart items in the 'index.d.ts' file since the computed cart items is to be used in the cart controller to avoid duplication 
+between the query in the index method there and the one in the 'HandleInertiaRequests' file.
+
+______________
+
+There is a currently an issue in Filament (as of version 3) where the query of the navigation badge is executed twice.
+
+This issue seems to root from the Navigation Manager being called twice due to a PR by Dan Harrin.
+
+The issue forum comes from this link: https://github.com/filamentphp/filament/issues/13388
 
 ----------------------------------------------------------------

@@ -97,12 +97,12 @@ class CartService
 
                 // For authenticated users, retrieve cart items from the database
                 if(Auth::check()) {
-                    self::$callCount++;
+                    // self::$callCount++;
 
-                    if (self::$callCount > 2) {
-                        // Function has been called more than once
-                        Log::info('myFunction called more than once. Call count: ' . self::$callCount);
-                    }
+                    // if (self::$callCount > 1) {
+                    //     // Function has been called more than once
+                    //     Log::info('myFunction called more than once. Call count: ' . self::$callCount);
+                    // }
                     $cartItems = $this->getCartItemsFromDatabase();
                     
                 // Otherwise, retrieve cart items from the cookies
@@ -237,10 +237,8 @@ class CartService
      * 
      * @return array
      */
-    public function getGroupedCartItems(): array
+    public function getGroupedCartItems(array $cartItems): array
     {
-        $cartItems = $this->getCartItems();
-
         /**
          * The returned array has the following format:
          * 
@@ -289,16 +287,9 @@ class CartService
      */
     protected function getCartItemsFromDatabase(): array
     {
-        $cartItems = CartItem::where('user_id', auth()->user()->id)->get()
-                            ->map(function ($cartItem) {
-                                return [
-                                    'id' => $cartItem->id,
-                                    'product_id' => $cartItem->product_id,
-                                    'quantity' => $cartItem->quantity,
-                                    'price' => $cartItem->price,
-                                    'option_ids' => $cartItem->variation_type_option_ids,
-                                ];
-                            })
+        $cartItems = CartItem::select('id', 'product_id', 'quantity', 'price', 'option_ids')
+                            ->where('user_id', auth()->user()->id)
+                            ->get()
                             ->toArray();
 
         return $cartItems;

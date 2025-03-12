@@ -10,7 +10,7 @@ enum OrderStatusEnum: string
     case Delivered = 'delivered';
     case Cancelled = 'cancelled';
 
-    public function labels() {
+    public static function labels() {
 
         return [
             self::Draft->value => __('Draft'),

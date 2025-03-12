@@ -82,6 +82,14 @@ Route::middleware('auth')->group(function () {
      *
      */
     Route::middleware('verified')->group(function () {
+
+        /**
+         * 
+         *   __        __  ___ 
+         *  /  `  /\  |__)  |  
+         *  \__, /~~\ |  \  |  
+         *
+         */
         Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
         /**

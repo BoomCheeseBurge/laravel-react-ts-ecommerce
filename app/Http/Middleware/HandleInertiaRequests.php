@@ -36,15 +36,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $cartService = app(CartService::class);
-        
-        $cartItems = $cartService->getCartItems();
-        $totalQuantity = $cartService->getTotalQuantity($cartItems);
-        $totalPrice = $cartService->getTotalPrice($cartItems);
+        if (!$request->routeIs('livewire.*')) {
 
-        $departments = Department::published()
-                                ->with('categories')
-                                ->get();
+            $cartService = app(CartService::class);
+            
+            $cartItems = $cartService->getCartItems();
+            $totalQuantity = $cartService->getTotalQuantity($cartItems);
+            $totalPrice = $cartService->getTotalPrice($cartItems);
+    
+            $departments = Department::published()
+                                    ->with('categories')
+                                    ->get();
+        }
 
         return [
             ...parent::share($request),
@@ -61,14 +64,15 @@ class HandleInertiaRequests extends Middleware
                 'time' => microtime(true),
             ],
             'error' => session('error'),
-            'totalQuantity' => $totalQuantity,
-            'totalPrice' => $totalPrice,
-            'dropdownCartItems' => $cartItems,
+            'totalQuantity' => $totalQuantity ?? 0,
+            'totalPrice' => $totalPrice ?? 0,
+            'dropdownCartItems' => $cartItems ?? [],
             'csrf_token' => csrf_token(),
-            'departments' => DepartmentResource::collection($departments)->collection->toArray(),
+            'departments' => isset($departments) ? DepartmentResource::collection($departments)->collection->toArray() : [],
             'appName' => config('app.name'),
             'departmentParam' => Route::currentRouteName() === 'product.byDepartment' ? $request->segment(2) : '',
             'keyword' => $request->query('keyword'),
+            'cartItems' => $cartItems ?? [],
         ];
     }
 }

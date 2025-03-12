@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Pages;
+// use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use App\Enums\RolesEnum;
@@ -33,14 +33,15 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css') // For applying custom Tailwind CSS theme
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                // Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
@@ -54,8 +55,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 'auth',
-                sprintf('role:%s|%s', RolesEnum::Admin->value, RolesEnum::Vendor->value),
+                sprintf('role:%s|%s', RolesEnum::Admin->value, RolesEnum::Vendor->value), // use Spatie 'role' middleware
             ])
+            // Disable Filament's own login page
             // ->authMiddleware([
             //     Authenticate::class,
             // ])

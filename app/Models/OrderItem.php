@@ -21,6 +21,13 @@ class OrderItem extends Model
         'variation_type_option_ids' => 'array',
     ];
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['product'];
+
     // ----------------------------------------------------------------
     /**
      * 
@@ -46,6 +53,6 @@ class OrderItem extends Model
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->without(['variationTypes', 'options']);
     }
 }

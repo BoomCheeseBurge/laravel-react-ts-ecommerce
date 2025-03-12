@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request, CartService $cartService): HttpFoundationResponse
     {
-        (new Timebox)->call(function ($timebox) use ($request, $cartService) {
+        return (new Timebox)->call(function ($timebox) use ($request, $cartService) {
 
             $request->authenticate($timebox);
 
@@ -59,8 +59,6 @@ class AuthenticatedSessionController extends Controller
             // Move the cart items from cookies to the database (if any)
             $cartService->moveCartItemsToDatabase($user->id);
 
-        }, 400 * 1000);
-
         // $endTime = microtime(true);
         // $executionTime = ($endTime - $startTime) * 1000; // Convert to milliseconds
 
@@ -72,7 +70,8 @@ class AuthenticatedSessionController extends Controller
          * Instead, it will only be '/home'
          * The full base URL will come from the redirect intended route.
          */
-        return redirect()->intended(route('home', absolute: false));
+            return redirect()->intended(route('home', absolute: false));
+        }, 400 * 1000);
     }
 
     /**

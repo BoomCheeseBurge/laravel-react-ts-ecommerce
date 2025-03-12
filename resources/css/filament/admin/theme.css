@@ -1,0 +1,68 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+/** @type {import('tailwindcss').Config} */
+@config 'tailwind.config.js';
+
+/*
+ *
+ *  ____ _ _    ____ _  _ ____ _  _ ___ 
+ *  |___ | |    |__| |\/| |___ |\ |  |  
+ *  |    | |___ |  | |  | |___ | \|  |  
+ *
+*/
+
+/* Override subheading font size */
+.fi-header-subheading {
+    @apply text-xs; /* Change to your desired font size */
+}
+
+/*
+ *
+ *  ____ ____ ___  ____ ____    _ ___ ____ _  _    _  _ _ ____ _ _ _ 
+ *  |  | |__/ |  \ |___ |__/    |  |  |___ |\/|    |  | | |___ | | | 
+ *  |__| |  \ |__/ |___ |  \    |  |  |___ |  |     \/  | |___ |_|_| 
+ *
+*/
+
+.order-item-container {
+    @apply dark:bg-gray-800 rounded-md shadow-md p-8 bg-gray-100/70;
+}
+
+.item-prop {
+    @apply font-semibold text-lg;
+}
+
+.item-val {
+    @apply dark:text-primary-500 text-slate-900 font-medium text-center;
+}
+
+.item-title {
+    @apply font-bold text-xl;
+}
+
+.order-item-card {
+    @apply border-b-[1px] pb-4 mb-6 border-b-gray-400 dark:border-b-slate-400 gap-8 flex items-center;
+}
+
+.option-container {
+    @apply flex gap-2 my-3;
+}
+
+.order-item-image {
+    @apply h-32 rounded-sm hover:scale-[2] hover:relative hover:transition-transform hover:z-50 hover:drop-shadow-md border-[1px] border-slate-200;
+}
+
+.option-badge {
+    @apply py-1 px-3 dark:text-slate-900 text-sm dark:font-medium drop-shadow-md bg-gradient-to-r dark:from-amber-500 dark:to-orange-600 rounded-3xl shadow-md dark:shadow-stone-500 select-none from-slate-700 to-gray-800 shadow-yellow-500 text-amber-500 font-semibold tracking-wider;
+}
+
+.order-item-detail {
+    @apply flex gap-2 items-center;
+}
+
+.vertical-divider {
+    @apply inline-block h-[150px] min-h-[1em] w-0.5 self-stretch bg-neutral-200 dark:bg-white/10;
+}
+
+.detail-box {
+    @apply border-[1px] dark:border-gray-100/40 border-gray-300/70 rounded-lg px-3 py-2 hover:scale-110 hover:shadow-md transition-transform;
+}

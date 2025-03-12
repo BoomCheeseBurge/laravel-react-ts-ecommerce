@@ -21,8 +21,10 @@ class CartController extends Controller
      */
     public function index(CartService $cartService)
     {
+        $sharedData = Inertia::getShared();
+
         return Inertia::render('Cart/Index', [
-            'cartItems' => $cartService->getGroupedCartItems(),
+            'cartItems' => $cartService->getGroupedCartItems($sharedData['cartItems'] ?? []),
         ]);
     }
 
@@ -92,6 +94,8 @@ class CartController extends Controller
 
         $vendorId = $request->input('vendor_id');
 
+        $cartItems = $cartService->getCartItems();
+
         /**
          * Has data structure:
          * 
@@ -100,7 +104,7 @@ class CartController extends Controller
          *  2 => [],
          * ]
          */
-        $groupedCartItems = $cartService->getGroupedCartItems();
+        $groupedCartItems = $cartService->getGroupedCartItems($cartItems);
 
         DB::beginTransaction();
         try {
@@ -125,7 +129,7 @@ class CartController extends Controller
             // For Stripe instance
             $lineItems = [];
 
-            // Loop through grouped items of each vendor
+            // Loop through grouped cart items of each vendor
             foreach ($checkoutCartItems as $item) {
                 
                 $user = $item['user'];

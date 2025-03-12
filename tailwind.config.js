@@ -9,6 +9,8 @@ export default {
         './resources/js/**/*.tsx',
     ],
 
+    darkMode: 'class',
+
     theme: {
         extend: {
             fontFamily: {

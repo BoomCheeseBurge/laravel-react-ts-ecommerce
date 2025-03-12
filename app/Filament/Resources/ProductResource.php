@@ -37,10 +37,30 @@ class ProductResource extends Resource
     protected static ?string $model = Product::class;
 
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationIcon = 'heroicon-s-queue-list';
+    // protected static ?string $navigationIcon = 'heroicon-s-queue-list';
+    protected static ?string $navigationIcon = 'heroicon-s-rectangle-group';
+
+    // Place this nav item on position 2 (based on the number nav items in the page)
+    protected static ?int $navigationSort = 2;
+
+    // Store the navigation badge query
+    protected static ?string $navigationBadge = null;
+    
+    // Display number of unique products the vendor has published
+    public static function getNavigationBadge(): ?string
+    {
+        // Only run the query if the property is not set
+        if(!isset(self::$navigationBadge))
+        {
+            self::$navigationBadge = static::getModel()::belongsToVendor(auth()->user()->id)->count();
+        }
+
+        return self::$navigationBadge;
+    }
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
-
+    
+    // Get the products that belongs to the vendor only
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->belongsToVendor(auth()->user()->id);
