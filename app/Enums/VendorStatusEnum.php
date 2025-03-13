@@ -17,17 +17,17 @@ enum VendorStatusEnum: string
         };
     }
 
-    public function labels(): array
+    public static function labels(): array
     {
         return [
             self::Pending->value => __('Pending'),
-            self::Approved->value => __('Approve'),
+            self::Approved->value => __('Approved'),
             self::Rejected->value => __('Rejected'),
         ];
     }
 
     // For differentiating vendor status in filament admin panel
-    public function color(): array
+    public static function color(): array
     {
         return [
             'gray' => self::Pending->value,

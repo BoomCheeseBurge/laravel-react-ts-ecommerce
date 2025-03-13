@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RolesEnum;
+use App\Http\Resources\AuthUserResource;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -42,6 +44,9 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Assign a default 'User' role
+        $user->assignRole(RolesEnum::User);
 
         /*
          * With the project skeleton structure changed in Laravel 11, the 'EvenServiceProvider' class is no longer easily accessible from the project directory 

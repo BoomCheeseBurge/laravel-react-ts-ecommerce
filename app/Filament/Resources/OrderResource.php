@@ -90,7 +90,8 @@ class OrderResource extends Resource
                         ->sortable(),
                 TextColumn::make('vendor_subtotal')
                         ->label('Subtotal')
-                        ->formatStateUsing(fn (?float $state): string => isset($state) ? Number::currency($state) : _("N/A"))
+                        ->formatStateUsing(fn (?float $state): string => Number::currency($state))
+                        ->placeholder('N/A')
                         ->searchable()
                         ->sortable(),
                 TextColumn::make('status')

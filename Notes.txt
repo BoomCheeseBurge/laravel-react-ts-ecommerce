@@ -1270,3 +1270,28 @@ This issue seems to root from the Navigation Manager being called twice due to a
 The issue forum comes from this link: https://github.com/filamentphp/filament/issues/13388
 
 ----------------------------------------------------------------
+
+Created 'simple' Filament resource for User model.
+
+______________
+
+Fixed non-existent value for 'subtotal' column in the Order list table using placeholder method on its column.
+
+______________
+
+Created a Laravel mailable class with markdown view called 'InitialPasswordSetup' in the case where the admin creates a new user.
+An email is sent to the newly created user's email to let them set their own password.
+
+______________
+
+Created an invokable Action class for setting up the initial password email request to the newly created user by admin.
+
+Created a notification for sending the initial password email.
+
+Added a new route in the 'auth.php' file for viewing the initial password setting with the named alias 'password.initial'.
+
+______________
+
+When an admin user create an account for a specific user, an email will be sent to the user's email to let them set their password.
+
+----------------------------------------------------------------
