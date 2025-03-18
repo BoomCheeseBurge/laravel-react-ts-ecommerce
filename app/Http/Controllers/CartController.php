@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\OrderStatusEnum;
-use App\Models\Order;
-use App\Models\OrderItem;
-use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Inertia\Inertia;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use App\Services\CartService;
-use Illuminate\Support\Facades\DB;
 use Stripe\Checkout\Session;
+use App\Services\CartService;
+use App\Enums\OrderStatusEnum;
+use Illuminate\Support\Facades\DB;
+use App\Models\VariationTypeOption;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -20,7 +23,17 @@ class CartController extends Controller
      * Display a listing of the resource.
      */
     public function index(CartService $cartService)
-    {
+    {  
+        // Get stale orders from this user
+        $orders = Order::where('user_id', auth()->user()->id)
+                    ->where('status', OrderStatusEnum::Draft->value)
+                    ->get();
+                    
+        // Clear previous draft orders made
+        foreach ($orders as $order) {
+            $order->delete(); // This will trigger the deleting event for its corresponding order items
+        }
+
         $sharedData = Inertia::getShared();
 
         return Inertia::render('Cart/Index', [
@@ -92,6 +105,7 @@ class CartController extends Controller
 
         Stripe::setApiKey(config('app.stripe_secret_key'));
 
+        // A vendor ID is only provided if the user (or customer) decides to only purchase item(s) from a specific vendor from the checkout page
         $vendorId = $request->input('vendor_id');
 
         $cartItems = $cartService->getCartItems();
@@ -110,6 +124,7 @@ class CartController extends Controller
         try {
             $checkoutCartItems = $groupedCartItems;
 
+            // Check if the checkout is only for a single vendor
             if ($vendorId)
             {
                 /**
@@ -135,6 +150,7 @@ class CartController extends Controller
                 $user = $item['user'];
                 $cartItems = $item['items'];
 
+                // Create an order for the vendor of the current item
                 $order = Order::create([
                     'stripe_session_id' => null,
                     'user_id' => $request->user()->id,
@@ -161,6 +177,7 @@ class CartController extends Controller
                         return "{$item['type']['name']}: {$item['name']}";
                     })->implode(', ');
 
+                    // To be purchased item that will be informed to Stripe
                     $lineItem = [
                         'price_data' => [
                             'currency' => config('app.currency'),

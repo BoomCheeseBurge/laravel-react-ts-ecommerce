@@ -5,7 +5,7 @@ import { Link, usePage } from "@inertiajs/react";
 function Dropdown() {
 
     const {totalQuantity, totalPrice, dropdownCartItems} = usePage().props;
-
+    
     return (
         <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-circle btn-ghost">

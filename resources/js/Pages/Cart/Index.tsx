@@ -10,7 +10,7 @@ function Index({
     csrf_token,
     cartItems,
     totalQuantity,
-    totalPrice
+    totalPrice,
 }: PageProps<{ cartItems: Record<number, GroupedCartItems> }>) {
     
     return (
@@ -34,7 +34,12 @@ function Index({
                             )}
 
                             {/* cartItem has the data structure defined for the cartItemData in CartService */}
-                            {Object.values(cartItems).map(cartItem => (
+                            {/* 
+                                NOTE:
+                                In the case of Object.values(), TypeScript essentially sees that you're extracting values from an object, 
+                                but it doesn't automatically propagate the precise GroupedCartItems type without your explicit assertion. 
+                            */}
+                            {Object.values(cartItems as Record<number, GroupedCartItems>).map(cartItem => (
                                 <div key={cartItem.user.id}>
                                     <div className="flex justify-between items-center pb-4 mb-4 border-b border-gray-300">
                                         <Link href="/" className="underline" >

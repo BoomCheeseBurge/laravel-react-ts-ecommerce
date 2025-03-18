@@ -1309,3 +1309,24 @@ Created a mailable class for sending an email to the user that has been approved
 The mailable class is named 'VendorApplicationStatus'.
 
 ----------------------------------------------------------------
+
+Adjusted the 'index' method in cart controller where stale orders (orders with draft status) are retrieved and removed from the database along with its corresponding order items.
+
+Added a boot method in the 'Order' model to trigger an event for deleting the corresponding order items beforehand when an order model is to be deleted.
+
+After order items deletion in the boot method, there is also expiration of checkout session for the order. 
+
+Note:
+
+    The default session expiration for Stripe Checkout Sessions is 24 hours from when they are created. 
+    However, you can adjust this expiration time down to a minimum of 30 minutes if needed. 
+    This adjustment is useful if you want to be notified of abandoned carts sooner. 
+    When a Checkout Session reaches its expiration time without the buyer completing the checkout, it is considered abandoned. 
+    At this point, the session is no longer accessible, and Stripe triggers the checkout.session.expired webhook event, 
+    which you can use to try to recover the sale by inviting the customer to complete their purchase in a new session.
+
+Alternatively, there is a provided method to recover abandoned cart checkout in the following link:
+
+    https://docs.stripe.com/payments/checkout/abandoned-carts?lang=php
+
+----------------------------------------------------------------

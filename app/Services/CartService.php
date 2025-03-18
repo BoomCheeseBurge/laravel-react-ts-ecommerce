@@ -135,6 +135,8 @@ class CartService
 
                 $cartItemData = [];
 
+                // dd($cartItems);
+
                 foreach ($cartItems as $cartItem) {
 
                     // Retrieve a single product based on the cart item of the current loop 
@@ -146,6 +148,8 @@ class CartService
                      * Note: the product either got deleted or unpublished when the product was added to the cart
                      */
                     if (!$product) continue;
+
+                    // dd($cartItem['option_ids']);
 
                     // Retrieve the variation type options
                     $optionInfo = [];
@@ -287,9 +291,17 @@ class CartService
      */
     protected function getCartItemsFromDatabase(): array
     {
-        $cartItems = CartItem::select('id', 'product_id', 'quantity', 'price', 'option_ids')
-                            ->where('user_id', auth()->user()->id)
+        $cartItems = CartItem::where('user_id', auth()->user()->id)
                             ->get()
+                            ->map(function ($cartItem) {
+                                return [
+                                    'id' => $cartItem->id,
+                                    'product_id' => $cartItem->product_id,
+                                    'quantity' => $cartItem->quantity,
+                                    'price' => $cartItem->price,
+                                    'option_ids' => $cartItem->variation_type_option_ids,
+                                ];
+                            })
                             ->toArray();
 
         return $cartItems;

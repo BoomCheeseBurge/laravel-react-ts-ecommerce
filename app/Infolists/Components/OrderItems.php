@@ -26,12 +26,6 @@ class OrderItems extends Entry
         foreach ($variationOptions->loadMissing('media') as $option) {
 
             $images[] = $option->getFirstMediaUrl('images');
-
-            if (empty($media)) {
-                continue;
-            }
-            
-            $images[] = $media;
         }
 
         return [

@@ -9,7 +9,7 @@
         @foreach ($data[0] as $key => $item)
             <div class="order-item-card">
                 <div>
-                    <img src={{ $data[2][$key] ?? $item->product->getMediaUrl() }} alt="Product Image" class="order-item-image">
+                    <img src="{{ $data[2][$key] ?? $item->product->getFirstMediaUrl('images') }}" alt="Product Image" class="order-item-image">
                 </div>
 
                 <div>

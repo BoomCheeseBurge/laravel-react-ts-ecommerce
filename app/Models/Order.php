@@ -20,6 +20,27 @@ class Order extends Model
         'payment_intent',
     ];
 
+    /**
+     * The "booted" method of the model.
+     */
+     protected static function booted(): void
+     {
+         static::deleting(function (Order $order) {
+ 
+            $order->orderItems()->delete(); // Delete associated order items
+
+            // Get the Stripe client
+            $stripe = new \Stripe\StripeClient(config('app.stripe_secret_key'));
+
+            // Expire the checkout session
+            $stripe->checkout->sessions->expire(
+            $order->stripe_session_id,
+            []
+            );
+ 
+         });
+     }
+
     // ---------------------------------------------------------------------
     /**
      * 
