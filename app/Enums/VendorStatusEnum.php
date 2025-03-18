@@ -35,4 +35,14 @@ enum VendorStatusEnum: string
             'danger' => self::Rejected->value,
         ];
     }
+
+    // For Filament table
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Approved => 'success',
+            self::Rejected => 'danger',
+        };
+    }
 }

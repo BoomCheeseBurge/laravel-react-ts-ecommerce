@@ -47,7 +47,7 @@ function ProductItem({ product }: { product: Product}) {
                 </p>
 
                 <div className="card-actions justify-between items-center mt-3">
-                    <button onClick={addToCart} className="btn btn-primary">
+                    <button onClick={addToCart} className="btn btn-primary" >
                         Add to Cart
                     </button>
 

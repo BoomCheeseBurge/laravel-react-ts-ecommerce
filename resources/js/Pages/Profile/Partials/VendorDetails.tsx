@@ -41,14 +41,15 @@ function VendorDetails({ className = '' }: { className?: string }) {
     const becomeVendor: FormEventHandler = (event) => {
         event.preventDefault();
 
-        post(route('vendor.store'), {
+        post(route('vendor.register'), {
             preserveScroll: true,
             onSuccess: () => {
                 // Close the modal window
                 closeModal();
 
                 // Set success message
-                setSuccessMessage('You can now create and publish products');
+                // setSuccessMessage('You can now create and publish products');
+                setSuccessMessage('Please await an email from us for further info.');
             },
             onError: (errors) => {},
         });
@@ -120,8 +121,13 @@ function VendorDetails({ className = '' }: { className?: string }) {
                     </PrimaryButton>
                 )}
 
-                {/* If user is a vendor */}
-                {user.vendor && (
+                {/* Show info that this user's vendor request is being processed */}
+                {user.vendor?.status === 'pending' && (
+                    <div>Your vendor request is being processed by us. Await an email from us!</div>
+                )}
+
+                {/* If user is an approved vendor */}
+                {user.vendor?.status === "approved" && (
                     <>
                         <form onSubmit={updateVendor} className="mb-5" >
                             {/* Vendor Store Name Input */}
@@ -175,8 +181,23 @@ function VendorDetails({ className = '' }: { className?: string }) {
                             )}
 
                             {/* Let the vendor user connect to Stripe */}
-                            {!user.stripe_account_active && (
-                                <button type="submit" className="inset-shadow-rose-500/50 inset-shadow-sm px-4 py-2 font-semibold text-white bg-red-600 rounded-lg" >
+                            <div className="bg-primary card w-full text-white">
+                                <div className="card-body">
+                                    <h2 className="card-title">Uh Oh!</h2>
+                                    
+                                    <div>
+                                        Your account is not eligible to connect to stripe. <br />
+                                        Please contact our administrator.
+                                    </div>
+                                </div>
+                            </div>
+                            {user.vendor.status != "approved" && (
+                                <div className="mb-2"></div>
+                            )}
+                            {(!user.stripe_account_active) && (
+                                <button type="submit" 
+                                    className={"inset-shadow-rose-500/50 inset-shadow-sm px-4 py-2 font-semibold rounded-lg " + (user.vendor.status === 'approved' ? "text-white bg-red-600" : "text-slate-300 bg-red-800") } 
+                                    disabled={user.vendor.status != 'approved'}>
                                     Connect to Stripe
                                 </button>
                             )}

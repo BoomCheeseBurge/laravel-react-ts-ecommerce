@@ -41,8 +41,37 @@ class VendorController extends Controller
         ]);
     }
 
+    public function requestVendor(Request $request): void
+    {
+        // Get the current auth user info
+        $user = $request->user();
+
+        $validatedData = $request->validate([
+            'store_name' => [
+                                'required', 
+                                'regex:/^[a-z0-9-]+$/', 
+                                Rule::unique('vendors', 'store_name')->ignore($user->id, 'user_id'),
+                            ],
+            'store_address' => 'nullable',
+        ], [
+            'store_name.regex' => 'Store name MUST ONLY contain lowercase alphanumeric characters and dashes.'
+        ]);
+
+        Vendor::create([
+            'user_id' => $user->id,
+            'status' => VendorStatusEnum::Pending->value,
+            'store_name' => $validatedData['store_name'],
+            'store_address' => $validatedData['store_address'],
+        ]);
+        
+        // Assign user to vendor role
+        $user->assignRole(RolesEnum::Vendor);
+
+        return;
+    }
+
     /**
-     * Upsert vendor user
+     * Update vendor user
      * 
      * @param \Illuminate\Http\Request $request
      * @return void
@@ -63,22 +92,23 @@ class VendorController extends Controller
             'store_name.regex' => 'Store name MUST ONLY contain lowercase alphanumeric characters and dashes.'
         ]);
 
-        // Check if this user is a vendor, else create into one
-        $vendor = $user->vendor ?: new Vendor();
+        $vendor = $user->vendor;
 
         // Assign the updated (or existing) values
         $vendor->user_id = $user->id;
-        $vendor->status = VendorStatusEnum::Approved->value; // Auto-approve user as vendor
+        $vendor->status = VendorStatusEnum::Pending->value;
         $vendor->store_name = $request->store_name;
         $vendor->store_address = $request->store_address;
         $vendor->save();
 
-        // Assign user to vendor role
-        $user->assignRole(RolesEnum::Vendor);
-
         return;
     }
 
+    /**
+     * Generate and retrieve Pexel image
+     * 
+     * @return array
+     */
     public function generatePexelImages(): array
     {
         // Set up the Pexel client

@@ -1295,3 +1295,17 @@ ______________
 When an admin user create an account for a specific user, an email will be sent to the user's email to let them set their password.
 
 ----------------------------------------------------------------
+
+Created Filament resource for vendor users for admin.
+
+______________
+
+Modified the vendor request by a user to await approval from the admin through email.
+
+______________
+
+Created a mailable class for sending an email to the user that has been approved or rejected to become a vendor by the admin.
+
+The mailable class is named 'VendorApplicationStatus'.
+
+----------------------------------------------------------------

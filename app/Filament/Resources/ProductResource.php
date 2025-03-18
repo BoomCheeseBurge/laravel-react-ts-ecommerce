@@ -221,6 +221,6 @@ class ProductResource extends Resource
 
         $user = Filament::auth()->user();
 
-        return $user && $user->hasRole(RolesEnum::Vendor);
+        return $user && $user->hasRole(RolesEnum::Vendor) && $user->vendor->status === "approved";
     }
 }

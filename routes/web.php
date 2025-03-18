@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 //     return $markdown->render('mail.vendor_payout');
 // })->name('test.mail.markdown');
 
+// Route::get('/markdown/mail', function () {
+//     $markdown = new Markdown(view(), config('mail.markdown'));
+
+//     return $markdown->render('mail.vendor_application_status', [
+//         'status' => "approved",
+//     ]);
+// })->name('test.mail.markdown');
+
 /**
  * 
  *   ______ _     _ _______ _______ _______
@@ -99,7 +107,8 @@ Route::middleware('auth')->group(function () {
          *   \/  |___ | \| |__/ \__/ |  \ 
          *
          */
-        Route::post('/vendor/register', [VendorController::class, 'store'])->name('vendor.store');
+        Route::post('/vendor/register', [VendorController::class, 'requestVendor'])->name('vendor.register');
+        Route::post('/vendor/setup', [VendorController::class, 'store'])->name('vendor.store');
 
         /**
          * 
