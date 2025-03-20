@@ -20,6 +20,27 @@ function CartItem({ item }: { item: CartItemType}) {
         });
     };
 
+    const onCheckoutLaterClick = () => {
+
+        // Reset previous error state
+        setError('');
+
+        /**
+         * Update the quantity for this cart item
+         * 
+         * Note: form is not used here for concern where quantity dynamically changes which requires set data on the form followed by the form HTTP request.
+         *       However, the quantity value from form set data will NOT be reflected on the form HTTP request until the next component render
+         */
+        router.put(route('cart.checkout.later', item.product_id), {
+            option_ids: item.option_ids
+        }, {
+            preserveScroll: true,
+            onError: (errors) => {
+                setError(Object.values(errors)[0])
+            }
+        });
+    };
+
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         // Reset previous error state
@@ -39,8 +60,10 @@ function CartItem({ item }: { item: CartItemType}) {
             onError: (errors) => {
                 setError(Object.values(errors)[0])
             }
-        })
+        });
     };
+
+    console.log(item.checkout_later);
 
     return (
         <>
@@ -79,7 +102,9 @@ function CartItem({ item }: { item: CartItemType}) {
                             <TextInput type="number" defaultValue={item.quantity} onBlur={handleQuantityChange} className="input-sm w-28 me-5" ></TextInput>
 
                             <button type="button" onClick={() => onDeleteClick()} className="btn btn-ghost btn-sm" >Delete</button>
-                            <button type="button" className="btn btn-ghost btn-sm" >Checkout Later</button>
+                            <button type="button" onClick={() => onCheckoutLaterClick()} className={"btn btn-sm " + (item.checkout_later ? "bg-primary" : "bg-slate-200")} >
+                                { item.checkout_later ? "Checkout Now" : "Checkout Later" }
+                            </button>
                         </div>
 
                         <div className="text-lg font-bold">

@@ -101,6 +101,23 @@ class CartController extends Controller
         return back()->with('success', 'Removed item from cart successfully!');
     }
 
+    /**
+     * Set checkout later for the item within the cart.
+     */
+    public function checkoutLater(Request $request, Product $product, CartService $cartService)
+    {
+        /**
+         * Determine which product variation option to update
+         * 
+         * Note: if product has no variation, assign empty array
+         */
+        $optionIds = $request->input('option_ids') ?: [];
+
+        $cartService->checkoutLater($product->id, $optionIds);
+
+        return back()->with('success', 'Cart item saved for later.');
+    }
+
     public function checkout(Request $request, CartService $cartService) {
 
         Stripe::setApiKey(config('app.stripe_secret_key'));
@@ -108,7 +125,14 @@ class CartController extends Controller
         // A vendor ID is only provided if the user (or customer) decides to only purchase item(s) from a specific vendor from the checkout page
         $vendorId = $request->input('vendor_id');
 
-        $cartItems = $cartService->getCartItems();
+        // Get the Inertia shared data
+        $sharedData = Inertia::getShared();
+
+        // Get the cart items from the shared data
+        $cartItems = $sharedData['cartItems'];
+
+        // Filter out cart items that is to be checked out later
+        $cartItems = array_filter($cartItems, fn ($item) => $item['checkout_later'] !== 1);
 
         /**
          * Has data structure:
@@ -121,6 +145,7 @@ class CartController extends Controller
         $groupedCartItems = $cartService->getGroupedCartItems($cartItems);
 
         DB::beginTransaction();
+        
         try {
             $checkoutCartItems = $groupedCartItems;
 
@@ -145,17 +170,17 @@ class CartController extends Controller
             $lineItems = [];
 
             // Loop through grouped cart items of each vendor
-            foreach ($checkoutCartItems as $item) {
+            foreach ($checkoutCartItems as $items) {
                 
-                $user = $item['user'];
-                $cartItems = $item['items'];
+                $user = $items['user'];
+                $cartItems = $items['items'];
 
                 // Create an order for the vendor of the current item
                 $order = Order::create([
                     'stripe_session_id' => null,
                     'user_id' => $request->user()->id,
                     'vendor_user_id' => $user['id'],
-                    'total_price' => $item['totalPrice'],
+                    'total_price' => $items['totalPrice'],
                     'status' => OrderStatusEnum::Draft->value,
                 ]);
 

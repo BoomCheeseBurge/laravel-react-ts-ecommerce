@@ -85,6 +85,7 @@ export type CartItem = {
     slug: string;
     price: number;
     quantity: number;
+    checkout_later: boolean;
     image: string;
     option_ids: Record<string, number>;
     options: VariationTypeOption[];

@@ -1330,3 +1330,15 @@ Alternatively, there is a provided method to recover abandoned cart checkout in 
     https://docs.stripe.com/payments/checkout/abandoned-carts?lang=php
 
 ----------------------------------------------------------------
+
+Added data type for checkout later for the cartItem type in the 'index.d.ts' file.
+
+Added checkout later or now boolean condition in the CartItem component.
+
+Adjusted getCartItems function in 'CartService' to retrieve the value of 'checkout_later'.
+
+______________
+
+Changed from calling the getCartItems function in the checkout() function of 'CartService' to using the Inertia shared data to avoid querying the same data again.
+
+----------------------------------------------------------------

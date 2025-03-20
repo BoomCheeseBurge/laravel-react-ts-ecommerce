@@ -78,6 +78,26 @@ class CartService
         }
     }
 
+    public function checkoutLater(int $productId, ?array $optionIds = null): void
+    {
+        // Ensures that the IDs are sorted in the following format: [1,4] or [2,5] (NOT [4,1] or [5,2])
+        ksort($optionIds);
+
+        $cartItem = CartItem::where('user_id', auth()->user()->id)
+                            ->where('product_id', $productId)
+                            ->where('variation_type_option_ids', json_encode($optionIds))
+                            ->first();
+
+        // Update cart item if it is found in the database
+        if ($cartItem) {
+            $cartItem->update([
+                'checkout_later' => !$cartItem->checkout_later,
+            ]);
+        }
+
+        return;
+    }
+
     // -----------------------------------------------
     /**
      * 
@@ -188,6 +208,7 @@ class CartService
                         'slug' => $product->slug,
                         'price' => $cartItem['price'],
                         'quantity' => $cartItem['quantity'],
+                        'checkout_later' => $cartItem['checkout_later'],
                         'option_ids' => $cartItem['option_ids'],
                         'options' => $optionInfo,
                         'image' => $imageUrl ?: $product->getFirstMediaUrl('images', 'small'),
@@ -299,6 +320,7 @@ class CartService
                                     'product_id' => $cartItem->product_id,
                                     'quantity' => $cartItem->quantity,
                                     'price' => $cartItem->price,
+                                    'checkout_later' => $cartItem->checkout_later,
                                     'option_ids' => $cartItem->variation_type_option_ids,
                                 ];
                             })
