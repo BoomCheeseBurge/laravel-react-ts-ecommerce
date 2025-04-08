@@ -1342,3 +1342,19 @@ ______________
 Changed from calling the getCartItems function in the checkout() function of 'CartService' to using the Inertia shared data to avoid querying the same data again.
 
 ----------------------------------------------------------------
+
+Created a mobile responsive navbar using an absolute positioned div for the mobile navigation menu.
+
+Added a hamburger menu for mobile.
+
+______________
+
+Display cart dropdown on the navbar on mobile view.
+
+Created accordion menu for product category.
+
+______________
+
+Added an if statement to check for a logged-in user when entering the cart checkout page to delete stale orders.
+
+----------------------------------------------------------------

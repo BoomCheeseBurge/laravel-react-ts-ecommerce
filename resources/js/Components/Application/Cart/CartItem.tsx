@@ -62,9 +62,7 @@ function CartItem({ item }: { item: CartItemType}) {
             }
         });
     };
-
-    console.log(item.checkout_later);
-
+    
     return (
         <>
             <div className="flex gap-6 p-3">

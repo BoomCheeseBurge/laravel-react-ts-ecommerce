@@ -30,7 +30,7 @@ function Dropdown() {
 
             <div
                 tabIndex={0}
-                className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-[380px] shadow">
+                className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-[380px] shadow max-sm:-left-[16.5rem]">
                 <div className="card-body">
                     <span className="text-lg font-bold">
                         {totalQuantity} Items

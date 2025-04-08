@@ -12,10 +12,7 @@ use Stripe\Checkout\Session;
 use App\Services\CartService;
 use App\Enums\OrderStatusEnum;
 use Illuminate\Support\Facades\DB;
-use App\Models\VariationTypeOption;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -24,14 +21,18 @@ class CartController extends Controller
      */
     public function index(CartService $cartService)
     {  
-        // Get stale orders from this user
-        $orders = Order::where('user_id', auth()->user()->id)
-                    ->where('status', OrderStatusEnum::Draft->value)
-                    ->get();
-                    
-        // Clear previous draft orders made
-        foreach ($orders as $order) {
-            $order->delete(); // This will trigger the deleting event for its corresponding order items
+        // Check for logged-in user
+        if(auth()->user())
+        {
+            // Get stale orders from this user
+            $orders = Order::where('user_id', auth()->user()->id)
+                        ->where('status', OrderStatusEnum::Draft->value)
+                        ->get();
+                        
+            // Clear previous draft orders made
+            foreach ($orders as $order) {
+                $order->delete(); // This will trigger the deleting event for its corresponding order items
+            }
         }
 
         $sharedData = Inertia::getShared();
