@@ -181,19 +181,6 @@ function VendorDetails({ className = '' }: { className?: string }) {
                             )}
 
                             {/* Let the vendor user connect to Stripe */}
-                            <div className="bg-primary card w-full text-white">
-                                <div className="card-body">
-                                    <h2 className="card-title">Uh Oh!</h2>
-                                    
-                                    <div>
-                                        Your account is not eligible to connect to stripe. <br />
-                                        Please contact our administrator.
-                                    </div>
-                                </div>
-                            </div>
-                            {user.vendor.status != "approved" && (
-                                <div className="mb-2"></div>
-                            )}
                             {(!user.stripe_account_active) && (
                                 <button type="submit" 
                                     className={"inset-shadow-rose-500/50 inset-shadow-sm px-4 py-2 font-semibold rounded-lg " + (user.vendor.status === 'approved' ? "text-white bg-red-600" : "text-slate-300 bg-red-800") } 
@@ -203,6 +190,21 @@ function VendorDetails({ className = '' }: { className?: string }) {
                             )}
                         </form>
                     </>
+                )}
+
+                {user.vendor.status == "rejected" && (
+                    <div className="mb-2">
+                        <div className="bg-primary card w-full text-white">
+                            <div className="card-body">
+                                <h2 className="card-title">Uh Oh!</h2>
+                                
+                                <div>
+                                    Your account is not eligible to connect to stripe. <br />
+                                    Please contact our administrator.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
 
