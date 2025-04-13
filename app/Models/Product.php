@@ -274,7 +274,7 @@ class Product extends Model implements HasMedia
             sort($optionIds);
 
             // Get the variation type options based on the sorted IDs
-            $options = VariationTypeOption::whereIn('id', $optionIds)->get();
+            $options = VariationTypeOption::whereIn('id', $optionIds)->with('media')->get();
 
             // Get the images of every option
             foreach ($options as $option) {
@@ -330,7 +330,7 @@ class Product extends Model implements HasMedia
      public function getFirstImageUrl(string $collectionName = 'images', string $conversion = 'small'): string
      {
         // Loop through the product variation type options
-        foreach ($this->options as $option) {
+        foreach ($this->options->loadMissing('media') as $option) {
             
             // Get the corresponding image of the option
             $imageUrl = $option->getFirstMediaUrl($collectionName, $conversion);

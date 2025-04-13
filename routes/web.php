@@ -1,13 +1,14 @@
 <?php
 
 use App\Enums\RolesEnum;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\VendorController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 // use Illuminate\Mail\Markdown;
 
 // Route::get('/markdown/mail', function () {
@@ -121,6 +122,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe.success');
         Route::get('/stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
         Route::post('/stripe/connect', [StripeController::class, 'connect'])->middleware('role:' . RolesEnum::Vendor->value)->name('stripe.connect');
+
+        /**
+         * 
+         *    __   __   __   ___  __  
+         *   /  \ |__) |  \ |__  |__) 
+         *   \__/ |  \ |__/ |___ |  \ 
+         *
+         */
+        Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
+
+        Route::post('/status/update', [OrderController::class, 'update'])->name('order.update');
     });
 });
 

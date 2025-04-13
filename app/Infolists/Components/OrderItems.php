@@ -15,9 +15,7 @@ class OrderItems extends Entry
     {
         $orderItems = OrderItem::where('order_id', $this->getRecord()->id)->get();
 
-        $optionIds = $orderItems->flatMap(function ($orderItem) {
-                        return array_values($orderItem->variation_type_option_ids);
-                    })->toArray();
+        $optionIds = $orderItems->flatMap(fn($orderItem) => array_values($orderItem->variation_type_option_ids))->toArray();
 
         $variationOptions = VariationTypeOption::whereIn('id', $optionIds)->get();
 

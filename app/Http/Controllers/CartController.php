@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DeliveryStatusEnum;
 use Stripe\Stripe;
 use Inertia\Inertia;
 use App\Models\Order;
@@ -11,6 +12,9 @@ use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Services\CartService;
 use App\Enums\OrderStatusEnum;
+use App\Http\Requests\StoreAddressRequest;
+use App\Models\Address;
+use App\Models\Delivery;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -119,7 +123,25 @@ class CartController extends Controller
         return back()->with('success', 'Cart item saved for later.');
     }
 
-    public function checkout(Request $request, CartService $cartService) {
+    public function checkout(StoreAddressRequest $request, CartService $cartService) {
+
+        $validatedData = $request->validated();
+
+        if($request->input('save_address'))
+        {
+            Address::updateOrCreate(
+            ['user_id' => auth()->user()->id],
+                [
+                    'full_name' => $validatedData['fullname'],
+                    'phone_number' => $validatedData['phone_number'],
+                    'address_line_1' => $validatedData['address_line_1'],
+                    'address_line_2' => $validatedData['address_line_2'],
+                    'city' => $validatedData['city'],
+                    'province' => $validatedData['province'],
+                    'postal_code' => $validatedData['postal_code'],
+                ]
+            );
+        }
 
         Stripe::setApiKey(config('app.stripe_secret_key'));
 
@@ -190,12 +212,28 @@ class CartController extends Controller
                 // Loop through the items from this specific vendor
                 foreach ($cartItems as $item) {
                     
-                    OrderItem::create([
+                    // Insert order item record
+                    $order = OrderItem::create([
                         'order_id' => $order->id,
                         'product_id' => $item['product_id'],
                         'quantity' => $item['quantity'],
                         'price' => $item['price'],
                         'variation_type_option_ids' => $item['option_ids'],
+                    ]);
+
+                    // Insert delivery record for the order item
+                    Delivery::create([
+                        'order_id' => $order->id,
+                        'date' => null,
+                        'status' => DeliveryStatusEnum::OrderReceived->value,
+                        'full_name' => $validatedData['full_name'],
+                        'phone_number' => $validatedData['phone_number'],
+                        'address_line_1' => $validatedData['address_line_1'],
+                        'address_line_2' => $validatedData['address_line_2'],
+                        'city' => $validatedData['city'],
+                        'province' => $validatedData['province'],
+                        'postal_code' => $validatedData['postal_code'],
+                        'instructions' => $validatedData['instructions'],
                     ]);
 
                     // Get the variation option description

@@ -3,7 +3,7 @@
     Heads up! A new order has been placed.
 </h1>
 
-<x-mail::button :url="$order->id">
+<x-mail::button :url="route('orders.index')">
     View Order Details
 </x-mail::button>
 

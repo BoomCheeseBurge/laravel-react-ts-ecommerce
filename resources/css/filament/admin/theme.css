@@ -66,3 +66,109 @@
 .detail-box {
     @apply border-[1px] dark:border-gray-100/40 border-gray-300/70 rounded-lg px-3 py-2 hover:scale-110 hover:shadow-md transition-transform;
 }
+
+/*
+ *
+ *   __   __   __   ___  __      __   ___              ___  __          __  ___      ___       __  
+ *  /  \ |__) |  \ |__  |__)    |  \ |__  |    | \  / |__  |__) \ /    /__`  |   /\   |  |  | /__` 
+ *  \__/ |  \ |__/ |___ |  \    |__/ |___ |___ |  \/  |___ |  \  |     .__/  |  /~~\  |  \__/ .__/ 
+ *
+*/
+
+.step-bar-container {
+    @apply flex flex-col gap-10 w-full justify-center items-center;
+}
+
+.step-wrapper {
+    @apply mx-auto max-w-screen-lg flex items-center;
+}
+
+.step-container-filled {
+    @apply w-full flex items-center;
+}
+
+.step-container-empty {
+    @apply flex items-center;
+}
+
+.step-holder-filled {
+    @apply mx-[-1px] w-7 h-7 flex shrink-0 justify-center relative items-center bg-blue-600 rounded-full;
+}
+
+.step-holder-empty {
+    @apply mx-[-1px] w-7 h-7 flex shrink-0 justify-center relative items-center bg-gray-300 rounded-full;
+}
+
+.step-content {
+    @apply text-sm font-semibold text-white;
+}
+
+.step-connector-filled {
+    @apply h-[3px] w-full mx-4 bg-blue-600 rounded-lg;
+}
+
+.step-connector-empty {
+    @apply h-[3px] w-full mx-4 bg-gray-300 rounded-lg;
+}
+
+.step-text {
+    @apply absolute min-w-32 mx-auto -bottom-6;
+}
+
+/* -------- */
+
+.delivery-wrapper {
+    @apply flex flex-col gap-5 w-full;
+}
+
+.test-wrapper {
+    @apply flex items-center justify-between w-full max-w-5xl mx-auto;
+}
+
+.test-container {
+    @apply w-full flex items-center;
+}
+
+.test-container-end {
+    @apply w-fit flex items-center;
+}
+
+.test-holder-filled {
+    @apply w-full h-0.5 bg-blue-500;
+}
+
+.test-holder-empty {
+    @apply w-full h-0.5 bg-gray-300;
+}
+
+.test-content-filled {
+    @apply relative z-10 rounded-full bg-blue-500 text-white w-8 h-8 flex items-center justify-center text-sm font-semibold;
+}
+
+.test-content-empty {
+    @apply relative z-10 rounded-full bg-gray-300 text-gray-700 w-8 h-8 flex items-center justify-center text-sm font-semibold;
+}
+
+.test-desc-container {
+    @apply mt-2 text-center;
+}
+
+.test-desc-filled {
+    @apply text-blue-500 font-medium w-36 max-xl:text-sm;
+}
+
+.test-desc-empty {
+    @apply text-gray-500 font-medium w-36 max-xl:text-sm;
+}
+
+.test-icon-wrapper {
+    @apply flex flex-col justify-center items-center;
+}
+
+.status-form {
+    @apply flex justify-center w-full mt-5;
+}
+
+.status-btn {
+    @apply relative h-12 overflow-hidden rounded bg-primary-500 px-5 py-2.5 text-white transition-all duration-300 hover:bg-primary-600 hover:ring-2 hover:ring-primary-400 hover:ring-offset-2;
+}

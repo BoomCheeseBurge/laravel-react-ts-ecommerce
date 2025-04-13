@@ -2,6 +2,7 @@ import { Link, useForm, usePage } from "@inertiajs/react";
 import Dropdown from "../Cart/Dropdown";
 import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import ParcelIcon from "@/Icons/ParcelIcon";
 
 function NavBar() {
 
@@ -83,8 +84,13 @@ function NavBar() {
                     <Link href="/" className="btn btn-ghost text-xl">LaraStore</Link>
                 </div>
 
+                {/* ------------------------------ ORDER PAGE ------------------------------ */}
+                <Link href={route('order.index')} className="md:hidden">
+                    <ParcelIcon className="h-12 p-3 rounded-full transition duration-300 hover:bg-gray-300 hover:shadow-inner" />
+                </Link>
+
                 {/* Shopping Cart Dropdown on Small Screen */}
-                <div className="mr-5 md:hidden">
+                <div className="mx-5 md:hidden">
                     <Dropdown />
                 </div>
 
@@ -97,6 +103,7 @@ function NavBar() {
                     </button>
                 </div>
 
+                {/* ------------------------------ Mobile Navbar Menu ------------------------------ */}
                 <div ref={menuRef} className={"absolute top-20 py-3 z-50 h-fit left-0 right-0 bg-slate-200 md:hidden " + (isMenuOpen ? 'block' : 'hidden')} >
                     <div className="flex flex-col items-center py-3 mx-3 bg-orange-600 rounded-md">
                         {user && (
@@ -158,7 +165,7 @@ function NavBar() {
                                 <span className="ml-1 font-semibold select-none">Category</span>
                             </label>
                             <div className="h-0 overflow-hidden peer-checked:h-fit peer-checked:overflow-scroll">
-                                <ul className="flex flex-col [&>li]:text-slate-100 [&>li]:font-semibold gap-2 mt-1 items-center py-2 list-none rounded-md border-2 border-slate-200 mx-2">
+                                <ul className="flex flex-col [&>li]:text-slate-100 [&>li]:font-semibold gap-3 mt-1 items-center py-2 list-none rounded-md border-2 border-slate-200 mx-2">
                                     {departments.map((department) => (
                                         <li key={department.id} className={"tracking-wider " + (activeDept === department.slug ? '!text-slate-900 underline' : '')} >
                                             <Link href={route('product.byDepartment', department.slug)} onClick={() => setActiveDept(department.name)}>
@@ -217,8 +224,17 @@ function NavBar() {
                         </div>
                     </form>
 
+                    {/* ------------------------------ ORDER PAGE ------------------------------ */}
+                    <Link href={route('order.index')}>
+                        <div className="tooltip tooltip-bottom" data-tip="My Orders">
+                            <ParcelIcon className="h-12 p-3 rounded-full transition duration-300 hover:bg-gray-300 hover:shadow-inner" />
+                        </div>
+                    </Link>
+
                     {/* ------------------------------ CART DROPDOWN ------------------------------ */}
-                    <Dropdown />
+                    <div className="tooltip tooltip-bottom" data-tip="My Cart">
+                        <Dropdown />
+                    </div>
 
                     {user && (
                         <>

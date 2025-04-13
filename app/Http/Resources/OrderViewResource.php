@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\VendorUserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderViewResource extends JsonResource
@@ -36,7 +37,9 @@ class OrderViewResource extends JsonResource
                     'slug' => $item->product->slug,
                     'description' => $item->product->description,
                     'image' => $item->product->getImageForOptions($item->variation_type_option_ids ?: []),
+                    'departmentName' => $item->product->department->name,
                 ],
+                'address' => new DeliveryAddressResource($item->address),
             ]),
         ];
     }

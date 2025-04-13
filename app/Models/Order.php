@@ -97,7 +97,7 @@ class Order extends Model
     }
 
     /**
-     * Get the vendor that is related the Order
+     * Get the vendor that is related to the Order
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

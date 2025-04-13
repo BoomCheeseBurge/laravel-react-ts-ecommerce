@@ -65,8 +65,8 @@ function CartItem({ item }: { item: CartItemType}) {
     
     return (
         <>
-            <div className="flex gap-6 p-3">
-                <Link href={showProductRoute(item)} className="min-h-36 min-w-36 w-36 flex justify-center self-start" >
+            <div className="flex flex-col gap-6 p-3 md:flex-row">
+                <Link href={showProductRoute(item)} className="flex justify-center self-start md:w-40" >
                     <img src={item.image} alt={item.title + ' image'} className="max-w-full max-h-full rounded-sm" />
                 </Link>
 
@@ -81,31 +81,31 @@ function CartItem({ item }: { item: CartItemType}) {
                         <div className="text-sm">
                             {item.options.map(option => (
                                 <div key={option.id} >
-                                    <strong className="text-bold">
+                                    <span className="font-medium">
                                         {option.type.name}: &nbsp;
-                                    </strong>
-                                    {option.name}
+                                    </span>
+                                    <span className="font-bold tracking-wider">
+                                        {option.name}
+                                    </span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex justify-between items-center mt-6">
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-col justify-between items-center gap-2 md:flex-row md:mt-6">
+                        <div className="w-fit flex flex-col items-center gap-2 md:flex-row">
                             <div className="text-base">Quantity:</div>
-
                             {/* Prevent quantity higher than the permissible quantity */}
                             <div className={error ? 'tooltip tooltip-error tooltip-open' : ''} data-tip={error} ></div>
+                            <TextInput type="number" defaultValue={item.quantity} onBlur={handleQuantityChange} className="input-sm w-28 md:me-5" ></TextInput>
 
-                            <TextInput type="number" defaultValue={item.quantity} onBlur={handleQuantityChange} className="input-sm w-28 me-5" ></TextInput>
-
-                            <button type="button" onClick={() => onDeleteClick()} className="btn btn-ghost btn-sm" >Delete</button>
+                            <button type="button" onClick={() => onDeleteClick()} className="btn btn-ghost btn-sm max-sm:mt-2" >Delete</button>
                             <button type="button" onClick={() => onCheckoutLaterClick()} className={"btn btn-sm " + (item.checkout_later ? "bg-primary" : "bg-slate-200")} >
                                 { item.checkout_later ? "Checkout Now" : "Checkout Later" }
                             </button>
                         </div>
 
-                        <div className="text-lg font-bold">
+                        <div className="text-lg font-bold max-sm:mt-5 md:ml-10">
                             <CurrencyFormatter amount={item.price * item.quantity} />
                         </div>
                     </div>

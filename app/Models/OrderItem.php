@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
@@ -36,6 +37,7 @@ class OrderItem extends Model
      *  |    \_ |______ |_____ |     |    |    __|__ |_____| |  \_|
      *
      */
+    
     /**
      * Get the order that owns the OrderItem
      *
@@ -54,5 +56,15 @@ class OrderItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class)->without(['variationTypes', 'options']);
+    }
+
+    /**
+     * Get the address associated with the OrderItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function address(): HasOne
+    {
+        return $this->hasOne(Delivery::class, 'order_id');
     }
 }

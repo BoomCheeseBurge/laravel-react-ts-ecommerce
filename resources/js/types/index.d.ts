@@ -40,6 +40,12 @@ export type VariationType = {
     options: VariationTypeOption[];
 };
 
+export type VariationOption = {
+    id: number;
+    variation_type_id: number;
+    name: string;
+};
+
 /**
  * This type covers for product list item and product details
  */
@@ -120,6 +126,21 @@ export type OrderItem = {
         slug: string;
         description: string;
         image: string;
+        departmentName: string;
+    };
+    address: {
+        id: number;
+        order_id: number;
+        date: string | null;
+        status: DeliveryStatus;
+        full_name: string;
+        phone_number: string | null;
+        address_line_1: string;
+        address_line_2: string | null;
+        city: string | null;
+        province: string | null;
+        postal_code: string | null;
+        instructions: string | null;
     }
 };
 

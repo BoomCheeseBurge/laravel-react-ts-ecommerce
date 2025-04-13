@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\CheckoutCompleted;
 use Stripe\Webhook;
 use Inertia\Inertia;
 use App\Models\Order;
+use App\Mail\NewOrder;
 use App\Models\CartItem;
 use Stripe\StripeClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\OrderStatusEnum;
-use App\Http\Resources\OrderViewResource;
-use App\Mail\NewOrder;
-use Illuminate\Http\RedirectResponse;
+use App\Mail\CheckoutCompleted;
+use App\Models\VariationTypeOption;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response as InertiaResponse;
+use App\Http\Resources\OrderViewResource;
 
 class StripeController extends Controller
 {
@@ -30,7 +31,9 @@ class StripeController extends Controller
     {
         $user = auth()->user();
         $session_id = $request->get('session_id');
-        $orders = Order::where('stripe_session_id', $session_id)->get();
+        $orders = Order::where('stripe_session_id', $session_id)
+                        ->with('orderItems')
+                        ->get();
 
         // If somehow the orders are not found in the database
         if ($orders->count() == 0) {
@@ -46,6 +49,14 @@ class StripeController extends Controller
 
         return Inertia::render('Stripe/Success', [
             'orders' => OrderViewResource::collection($orders)->collection->toArray(),
+            'variationOptions' => VariationTypeOption::whereIn(
+                'id',
+                $orders->flatMap(fn($order) => $order->orderItems->flatMap(fn($orderItem) => array_values($orderItem->variation_type_option_ids)))
+                    ->unique() // Add this line to get only unique IDs
+                    ->toArray()
+            )
+            ->get()
+            ->keyBy('id'),
         ]);
     }
 

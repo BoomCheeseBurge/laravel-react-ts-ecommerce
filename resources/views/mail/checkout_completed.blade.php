@@ -71,7 +71,7 @@
     </table>
 </x-mail::table>
 
-<x-mail::button :url="$order->id">
+<x-mail::button :url="route('orders.index')">
     View Order Details
 </x-mail::button>
 
@@ -83,7 +83,7 @@
 </x-mail::subcopy>
 
 <x-mail::panel>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi, nobis dicta! Ad voluptates qui quo, repellat omnis eveniet sequi accusamus porro dicta hic, modi aut aspernatur, voluptas corrupti cumque doloribus.
+    Hope to see you shop again with us very soon!
 </x-mail::panel>
 
 Thanks,<br>

@@ -1358,3 +1358,67 @@ ______________
 Added an if statement to check for a logged-in user when entering the cart checkout page to delete stale orders.
 
 ----------------------------------------------------------------
+
+Added new type for variation option in the 'index.d.ts' file.
+
+Added the variation option type for the variation option property in the Order type in the 'index.d.ts' file.
+
+______________
+
+Created an SVG icon for parcel icon.
+
+Created a navigation to the Order page in the Navbar component.
+
+Created a route to the index method of the OrderController.
+
+Created a React page for displaying the user's orders.
+
+______________
+
+This is for the 'options' variable in the 'Index.tsx' file for displaying the user's orders.
+
+Import Intl.DateTimeFormatOptions: 
+    Make sure that the Intl namespace and its DateTimeFormatOptions interface are available in your TypeScript environment. 
+    This is usually provided by the built-in TypeScript types or the @types/intl package. 
+    You might not need an explicit import statement if your tsconfig.json is configured correctly (as discussed in the previous response).
+
+-----
+
+Additionally, taken from the MDN docs, it is stated that: 
+    
+    every time toLocaleString is called, it has to perform a search in a big database of localization strings, which is potentially inefficient. 
+    When the method is called many times with the same arguments, it is better to create a Intl.DateTimeFormat object and use its format() method, 
+    because a DateTimeFormat object remembers the arguments passed to it and may decide to cache a slice of the database, 
+    so future format calls can search for localization strings within a more constrained context.
+
+______________
+
+Eager loaded relationships in the 'success' method of 'StripeController.php' and 'getFirstImageUrl' method of 'Product.php' files.
+
+______________
+
+Created a model and migration for 'Delivery' of orders.
+
+Created an enum file for order delivery status.
+
+______________
+
+Added an additional through a modal of providing address details before proceeding with the checkout.
+
+Created a form request for customer address.
+
+______________
+
+Created a React component for order item.
+
+Created a Laravel API resource for order delivery address.
+
+______________
+
+Created a Filament custom entry for delivery status on the vendor's order time page.
+
+______________
+
+Created a controller method for redirecting back to the Filament admin order show page.
+
+----------------------------------------------------------------

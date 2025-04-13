@@ -29,6 +29,7 @@ use Filament\Infolists\Components\TextEntry;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Infolists\Components\DeliveryStatus;
 use App\Infolists\Components\OrderItems;
 use Filament\Infolists\Components\Group;
 
@@ -201,6 +202,12 @@ class OrderResource extends Resource
     {
         return $infolist
             ->schema([
+                Section::make('Delivery Status')
+                ->schema([
+                    DeliveryStatus::make(''),
+                ])
+                ->collapsible(),
+
                 Section::make()
                 ->schema([
                     Split::make([
