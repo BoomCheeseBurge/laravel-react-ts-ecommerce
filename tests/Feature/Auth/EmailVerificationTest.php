@@ -13,46 +13,49 @@ class EmailVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setup(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->unverified()->create();
+    }
+
     public function test_email_verification_screen_can_be_rendered(): void
     {
-        $user = User::factory()->unverified()->create();
-
-        $response = $this->actingAs($user)->get('/verify-email');
+        $response = $this->actingAs($this->user)->get('/verify-email');
 
         $response->assertStatus(200);
     }
 
     public function test_email_can_be_verified(): void
     {
-        $user = User::factory()->unverified()->create();
-
         Event::fake();
 
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
+            ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
         );
 
-        $response = $this->actingAs($user)->get($verificationUrl);
+        $response = $this->actingAs($this->user)->get($verificationUrl);
 
         Event::assertDispatched(Verified::class);
-        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertTrue($this->user->fresh()->hasVerifiedEmail());
         $response->assertRedirect(route('home', absolute: false).'?verified=1');
     }
 
     public function test_email_is_not_verified_with_invalid_hash(): void
     {
-        $user = User::factory()->unverified()->create();
-
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1('wrong-email')]
+            ['id' => $this->user->id, 'hash' => sha1('wrong-email')]
         );
 
-        $this->actingAs($user)->get($verificationUrl);
+        $this->actingAs($this->user)->get($verificationUrl);
 
-        $this->assertFalse($user->fresh()->hasVerifiedEmail());
+        $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
     }
 }

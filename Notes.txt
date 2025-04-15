@@ -634,13 +634,15 @@ Replaced 'dashboard' with 'home' in the routes.
 
 ----------------------------------------------------------------
 
-Created a new Stripe account.
+***** Setup Stripe Account *****
 
-Create another store Stripe account (from the dashboard) for testing purposes named "Laravel Ecommerce Tutorial".
+1. Created a new Stripe account.
 
-Ensure that this newly created Stripe account is in 'test mode'.
+2. Create another store Stripe account (from the dashboard) for testing purposes named "Laravel Ecommerce Tutorial".
 
-Copied and pasted the API key from 'home' page to the ENV file named 'STRIPE_SECRET_KEY'. 
+3. Ensure that this newly created Stripe account is in 'test mode'.
+
+4. Copied and pasted the API key from 'home' page under 'For Developers' section to the ENV file named 'STRIPE_SECRET'.
 
 ______________
 
@@ -651,8 +653,8 @@ ______________
 - Follow the step by step displayed instructions:
     
     o Download the Stripe CLI for the used OS (for Windows download the stripe_1.24.0_windows_x86_64.zip )
-    o Extract the zip file to the desired location
-    o Add the directory path to the folder where the stripe.exe is located to the System Variables path.
+    o Extract the zip file to the desired location (ex: C:\Stripe)
+    o Add the directory path to the folder where the stripe.exe is located to your computer's System Variables path.
     o Open CMD and run this command: stripe login
     o Press 'Enter' which will open the Stripe page for authorizing access to the webhook.
 
@@ -695,7 +697,7 @@ ______________
 
     Ex of [local_domain_name]: laravel-react-ts-ecommerce.test/stripe/webhook
 
-- Copy the webhook key and paste to the ENV variables.
+- Copy the webhook key and paste to the ENV variable called 'STRIPE_WEBHOOK_KEY'.
 
 ______________
 
@@ -1420,5 +1422,11 @@ Created a Filament custom entry for delivery status on the vendor's order time p
 ______________
 
 Created a controller method for redirecting back to the Filament admin order show page.
+
+----------------------------------------------------------------
+
+Created a factory for Vendor model for testing purposes.
+
+Fixed existing feature tests provided when creating a new Laravel 11 project with Breeze. 
 
 ----------------------------------------------------------------

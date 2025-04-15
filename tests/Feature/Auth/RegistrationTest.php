@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Enums\RolesEnum;
+use Spatie\Permission\Models\Role;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegistrationTest extends TestCase
 {
@@ -18,12 +20,17 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
-        $response = $this->post('/register', [
+        // Create role for user
+        Role::create(["name"=> RolesEnum::User->value]);
+        
+        $userData = [
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
+            'email' => 'test@gmail.com',
+            'password' => 'P@ssw0rd123',
+            'password_confirmation' => 'P@ssw0rd123',
+        ];
+    
+        $response = $this->post('/register', $userData);
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('home', absolute: false));
