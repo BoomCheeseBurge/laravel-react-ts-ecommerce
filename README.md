@@ -19,10 +19,20 @@ The project utilizes SQLite, a file-based database, and Laravel Herd, for the Ng
 
 The project was developed using PHP version 8.3.
 
+Filament package is used for creating and displaying user-friendly dashboards.
+
 
 ## Locally running the Application
 
-## Start Laravel Herd (Free Ver.)
+### Installing Dependencies
+
+Use the following command to install the necessary dependencies (or packages) of the project:
+
+```
+npm install
+```
+
+### Start Laravel Herd (Free Ver.)
 
 - Install and move the project to Laravel Herd project folder.
 
